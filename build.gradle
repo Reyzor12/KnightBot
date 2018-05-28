@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'com.reyzor'
+version '1.0-SNAPSHOT'
+
+mainClassName = 'com.reyzor.discordbotknight.KnightDiscordBot'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    compile("com.google.code.gson:gson:2.8.2")
+    compile("com.sedmelluq:lavaplayer:1.2.63")
+    compile("joda-time:joda-time:2.9.9")
+    compile("net.dv8tion:JDA:3.6.0_367")
+    compile("org.apache.connons:commons-lang3:3.6")
+    compile("mysql:mysql-connector-java:6.0.6")
+    compile("org.springframework:spring-context:4.3.16.RELEASE")
+}
