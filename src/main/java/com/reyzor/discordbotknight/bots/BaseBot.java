@@ -68,7 +68,7 @@ public class BaseBot extends ListenerAdapter implements Bot {
     public Bot createBot()
     {
         bot = new JDABuilder(AccountType.BOT);
-        //bot.addEventListener(baseCommand);
+        bot.addEventListener(baseCommand);
         return this;
     }
 
