@@ -1,6 +1,8 @@
 package com.reyzor.discordbotknight.commands;
 
-import org.springframework.stereotype.Component;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import org.springframework.stereotype.Service;
 
 /**
  * Base command for bot
@@ -9,6 +11,20 @@ import org.springframework.stereotype.Component;
  * @since 27.05.2018
  */
 
-@Component
-public class BaseCommand {
+@Service
+public class BaseCommand extends ListenerAdapter {
+
+    @Override
+    public void onMessageReceived(MessageReceivedEvent event)
+    {
+        String message = event.getMessage().getContentDisplay();
+        if (message.contains("!"))
+        {
+            String command = message.substring(1);
+            if (command.equals("play"))
+            {
+                System.out.println("Hello world");
+            }
+        }
+    }
 }

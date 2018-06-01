@@ -2,6 +2,7 @@ package com.reyzor.discordbotknight;
 
 import com.reyzor.discordbotknight.bots.BaseBot;
 import com.reyzor.discordbotknight.bots.Bot;
+import com.reyzor.discordbotknight.commands.BaseCommand;
 import com.reyzor.discordbotknight.configuration.Context;
 import com.reyzor.discordbotknight.configuration.ContextConfiguration;
 import net.dv8tion.jda.core.AccountType;
@@ -25,15 +26,16 @@ public class KnightDiscordBot
 
     public static void main(String[] args) {
         if (!initContext(CONFIGURATION_CLASS)) return;
-        Bot bot = new BaseBot();
+        Bot bot = (new BaseBot()).createBot();
         try
         {
             new JDABuilder(AccountType.BOT)
                     .setToken("NDQxMTk3NDEzMDA1NTI0OTk0.Dcs4ow.hbSSeX8kAJr4b2yI4LbgdG-5pXA")
                     .setAudioEnabled(true)
-                    .setGame(Game.playing("..."))
+                    .setGame(Game.playing("Minecraft"))
                     .setStatus(OnlineStatus.DO_NOT_DISTURB)
                     .addEventListener(bot)
+                    //.addEventListener(new BaseCommand())
                     .buildAsync();
         } catch (LoginException e) {
             e.printStackTrace();
