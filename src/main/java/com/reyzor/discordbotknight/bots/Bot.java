@@ -1,11 +1,18 @@
 package com.reyzor.discordbotknight.bots;
 
+import com.reyzor.discordbotknight.configuration.BotConfig;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import net.dv8tion.jda.core.JDABuilder;
+import org.json.JSONException;
 
-import javax.security.auth.login.LoginException;
+import java.io.IOException;
+import java.util.concurrent.ScheduledExecutorService;
 
 public interface Bot {
-    Bot createBot();
-    void startBot() throws LoginException;
     JDABuilder getJDABot();
+    AudioPlayerManager getAudioManager();
+    ScheduledExecutorService getSchedule();
+    void loadSettings() throws IOException, JSONException;
+    void writeSettings();
+    BotConfig getBotConfig();
 }

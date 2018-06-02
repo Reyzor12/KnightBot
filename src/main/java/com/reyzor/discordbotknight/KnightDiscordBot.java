@@ -2,7 +2,6 @@ package com.reyzor.discordbotknight;
 
 import com.reyzor.discordbotknight.bots.BaseBot;
 import com.reyzor.discordbotknight.bots.Bot;
-import com.reyzor.discordbotknight.commands.BaseCommand;
 import com.reyzor.discordbotknight.configuration.Context;
 import com.reyzor.discordbotknight.configuration.ContextConfiguration;
 import net.dv8tion.jda.core.AccountType;
@@ -20,13 +19,14 @@ import javax.security.auth.login.LoginException;
 
 public class KnightDiscordBot
 {
-    private static final Class CONFIGURATION_CLASS = ContextConfiguration.class;
-    //private Bot bot;
+    private static final Class  CONFIGURATION_CLASS = ContextConfiguration.class;
+    private static final String COMMAND_BEAN        = "clientCommand";
+    private static Bot bot;
     private static Context context;
 
     public static void main(String[] args) {
         if (!initContext(CONFIGURATION_CLASS)) return;
-        Bot bot = (new BaseBot()).createBot();
+        bot = new BaseBot();
         try
         {
             new JDABuilder(AccountType.BOT)
@@ -35,7 +35,7 @@ public class KnightDiscordBot
                     .setGame(Game.playing("Minecraft"))
                     .setStatus(OnlineStatus.DO_NOT_DISTURB)
                     .addEventListener(bot)
-                    //.addEventListener(new BaseCommand())
+                    .addEventListener(context.getApplicationContext().getBean(COMMAND_BEAN) )
                     .buildAsync();
         } catch (LoginException e) {
             e.printStackTrace();

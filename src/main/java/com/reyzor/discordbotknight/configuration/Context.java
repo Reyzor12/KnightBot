@@ -41,4 +41,9 @@ public class Context {
         }
         return null;
     }
+
+    public ApplicationContext getApplicationContext()
+    {
+        return applicationContext;
+    }
 }

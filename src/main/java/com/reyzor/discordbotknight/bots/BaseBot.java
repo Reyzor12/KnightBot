@@ -7,7 +7,6 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
-import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Guild;
@@ -20,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -41,6 +39,7 @@ public class BaseBot extends ListenerAdapter implements Bot {
     private BaseCommand baseCommand;
     @Autowired
     private BotConfig config;
+
     private final AudioPlayerManager audioManager;
     private final HashMap<String, BotSettings> botSettings;
     private final ScheduledExecutorService schedule;
@@ -58,24 +57,10 @@ public class BaseBot extends ListenerAdapter implements Bot {
         audioManager.source(YoutubeAudioSourceManager.class).setPlaylistPageCount(10);
         try {
             writeSettings();
-            loadSetting();
+            loadSettings();
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public Bot createBot()
-    {
-        bot = new JDABuilder(AccountType.BOT);
-        bot.addEventListener(new BaseCommand());
-        return this;
-    }
-
-    @Override
-    public void startBot() throws LoginException
-    {
-        bot.buildAsync();
     }
 
     @Override
@@ -83,11 +68,12 @@ public class BaseBot extends ListenerAdapter implements Bot {
     {
         return bot;
     }
-
+    @Override
     public AudioPlayerManager getAudioManager() {return audioManager;}
+    @Override
     public ScheduledExecutorService getSchedule() {return schedule;}
-
-    private void loadSetting() throws IOException, JSONException
+    @Override
+    public void loadSettings() throws IOException, JSONException
     {
         JSONObject loadedSettings = new JSONObject(new String(Files.readAllBytes(Paths.get(SERVER_SETTINGS))));
         loadedSettings.keySet().forEach(id ->
@@ -103,6 +89,7 @@ public class BaseBot extends ListenerAdapter implements Bot {
             ));
         });
     }
+    @Override
     public void writeSettings()
     {
         JSONObject newSettings = new JSONObject();
@@ -126,7 +113,6 @@ public class BaseBot extends ListenerAdapter implements Bot {
             e.printStackTrace();
         }
     }
-
     @Override
     public void onReady(ReadyEvent event)
     {
@@ -147,5 +133,10 @@ public class BaseBot extends ListenerAdapter implements Bot {
         Guild otherBots = jda.getGuildById(110373943822540800L);
         if (otherBots == null) return;
         //if ()
+    }
+    @Override
+    public BotConfig getBotConfig()
+    {
+        return this.config;
     }
 }

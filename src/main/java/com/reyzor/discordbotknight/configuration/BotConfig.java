@@ -1,6 +1,13 @@
 package com.reyzor.discordbotknight.configuration;
 
-import org.springframework.stereotype.Component;
+import net.dv8tion.jda.core.OnlineStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 
 /**
  * Class is configuration of bot
@@ -9,6 +16,27 @@ import org.springframework.stereotype.Component;
  * @since 27.05.2018
  */
 
-@Component
-public class BotConfig {
+@Configuration
+@PropertySource("classpath:config.properties")
+public class BotConfig
+{
+    private final static Logger logger = LoggerFactory.getLogger(BotConfig.class);
+
+    @Autowired
+    private Environment properties;
+    private String configLocation = null;
+    @Value("${prefix}")
+    private String prefix;
+    private OnlineStatus status = OnlineStatus.UNKNOWN;
+
+
+    public BotConfig()
+    {
+
+    }
+
+    public String getPrefix()
+    {
+        return prefix;
+    }
 }
