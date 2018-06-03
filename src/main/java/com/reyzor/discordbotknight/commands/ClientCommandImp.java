@@ -1,6 +1,8 @@
 package com.reyzor.discordbotknight.commands;
 
 import com.reyzor.discordbotknight.bots.Bot;
+import com.reyzor.discordbotknight.commands.chatcommand.ChatCommandIF;
+import com.reyzor.discordbotknight.commands.chatcommand.ShowAllChatCommand;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.events.ReadyEvent;
@@ -24,8 +26,11 @@ import java.util.Map;
 @Service("clientCommand")
 public class ClientCommandImp implements EventListener, ClientCommand
 {
+    @Autowired
+    private ShowAllChatCommand showAllChatCommand;
+
     private Bot bot;
-    private Map<String, EventListener> commands;
+    private Map<String, ChatCommandIF> commands;
 
     public ClientCommandImp() {}
 
@@ -33,6 +38,7 @@ public class ClientCommandImp implements EventListener, ClientCommand
     public ClientCommandImp(Bot bot)
     {
         this.bot = bot;
+        this.commands = bot.getCommand();
     }
 
     @Override
@@ -67,15 +73,7 @@ public class ClientCommandImp implements EventListener, ClientCommand
         {
             if(isCommandForBot(event) && !commands.isEmpty())
             {
-                if ()
-                /*StringBuilder sb = new StringBuilder(event.getChannel().getName());
-                sb.append(" ");
-                sb.append(event.getChannelType().name());
-                sb.append(" ");
-                sb.append(event.getGuild().getName());
-                sb.append(" ");
-                sb.append(event.getMessage().getContentRaw());
-                event.getMessage().getChannel().sendMessage(sb.toString()).queue();*/
+                showAllChatCommand.execute(event, event.getMessage().getContentRaw());
             }
         }
     }
@@ -121,12 +119,12 @@ public class ClientCommandImp implements EventListener, ClientCommand
         return false;
     }
 
-    public Map<String, EventListener> getCommands()
+    public Map<String, ChatCommandIF> getCommands()
     {
         return this.commands;
     }
 
-    public void setCommands(Map<String, EventListener> commands)
+    public void setCommands(Map<String, ChatCommandIF> commands)
     {
         if (this.commands != null)
         {
@@ -136,4 +134,5 @@ public class ClientCommandImp implements EventListener, ClientCommand
             this.commands = commands;
         }
     }
+
 }

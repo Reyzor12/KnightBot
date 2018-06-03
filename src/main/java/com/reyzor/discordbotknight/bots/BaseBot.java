@@ -1,6 +1,7 @@
 package com.reyzor.discordbotknight.bots;
 
 import com.reyzor.discordbotknight.commands.BaseCommand;
+import com.reyzor.discordbotknight.commands.chatcommand.ChatCommandIF;
 import com.reyzor.discordbotknight.configuration.BotConfig;
 import com.reyzor.discordbotknight.configuration.BotSettings;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -44,12 +46,14 @@ public class BaseBot extends ListenerAdapter implements Bot {
     private final HashMap<String, BotSettings> botSettings;
     private final ScheduledExecutorService schedule;
     private final static String SERVER_SETTINGS = "serversettings.json";
+    private final Map<String, ChatCommandIF> commands;
 
     private JDABuilder bot;
     private JDA jda;
 
     public BaseBot() {
         botSettings = new HashMap<>();
+        commands = new HashMap<>();
         audioManager = new DefaultAudioPlayerManager();
         schedule = Executors.newSingleThreadScheduledExecutor();
         AudioSourceManagers.registerRemoteSources(audioManager);
@@ -138,5 +142,16 @@ public class BaseBot extends ListenerAdapter implements Bot {
     public BotConfig getBotConfig()
     {
         return this.config;
+    }
+
+    @Override
+    public Map<String, ChatCommandIF> addCommand(String command, ChatCommandIF executor) {
+        commands.putIfAbsent(command,executor);
+        return commands;
+    }
+
+    @Override
+    public Map<String, ChatCommandIF> getCommand() {
+        return commands;
     }
 }

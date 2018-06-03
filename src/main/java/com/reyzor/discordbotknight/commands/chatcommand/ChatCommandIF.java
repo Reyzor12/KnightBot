@@ -1,6 +1,8 @@
 package com.reyzor.discordbotknight.commands.chatcommand;
 
-import net.dv8tion.jda.core.hooks.EventListener;
+import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
-public interface ChatCommandIF extends EventListener {
+public interface ChatCommandIF {
+    void execute(MessageReceivedEvent event, String command);
+    String info();
 }
