@@ -1,6 +1,5 @@
 package com.reyzor.discordbotknight.configuration;
 
-import net.dv8tion.jda.core.OnlineStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 
 /**
- * Class is configuration of bot
+ * Configuration for class, which realize interface {@link com.reyzor.discordbotknight.bots.Bot}
+ * example {@link com.reyzor.discordbotknight.bots.BaseBot}
  * @author Reyzor
  * @version 1.0
  * @since 27.05.2018
@@ -24,16 +24,12 @@ public class BotConfig
 
     @Autowired
     private Environment properties;
-    private String configLocation = null;
+
     @Value("${prefix}")
     private String prefix;
-    private OnlineStatus status = OnlineStatus.UNKNOWN;
 
-
-    public BotConfig()
-    {
-
-    }
+    //private String configLocation = null;
+    //private OnlineStatus status = OnlineStatus.UNKNOWN;
 
     public String getPrefix()
     {

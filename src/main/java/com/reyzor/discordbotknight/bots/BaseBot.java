@@ -1,6 +1,5 @@
 package com.reyzor.discordbotknight.bots;
 
-import com.reyzor.discordbotknight.commands.BaseCommand;
 import com.reyzor.discordbotknight.commands.chatcommand.ChatCommandIF;
 import com.reyzor.discordbotknight.configuration.BotConfig;
 import com.reyzor.discordbotknight.configuration.BotSettings;
@@ -29,7 +28,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
- * Bot with main instruction
+ * Define simplest implementation of interface {@link Bot} for use in Discord
  * @author Reyzor
  * @version 1.0
  * @since 27.05.2018
@@ -38,31 +37,32 @@ import java.util.concurrent.ScheduledExecutorService;
 public class BaseBot extends ListenerAdapter implements Bot {
 
     @Autowired
-    private BaseCommand baseCommand;
-    @Autowired
     private BotConfig config;
+
+    private final static String SERVER_SETTINGS = "serversettings.json";
 
     private final AudioPlayerManager audioManager;
     private final HashMap<String, BotSettings> botSettings;
     private final ScheduledExecutorService schedule;
-    private final static String SERVER_SETTINGS = "serversettings.json";
     private final Map<String, ChatCommandIF> commands;
 
     private JDABuilder bot;
     private JDA jda;
 
-    public BaseBot() {
-        botSettings = new HashMap<>();
-        commands = new HashMap<>();
+    public BaseBot()
+    {
+        botSettings  = new HashMap<>();
+        commands     = new HashMap<>();
         audioManager = new DefaultAudioPlayerManager();
-        schedule = Executors.newSingleThreadScheduledExecutor();
-        AudioSourceManagers.registerRemoteSources(audioManager);
-        AudioSourceManagers.registerLocalSource(audioManager);
-        audioManager.source(YoutubeAudioSourceManager.class).setPlaylistPageCount(10);
+        schedule     = Executors.newSingleThreadScheduledExecutor();
+
+        setupAudioManager();
+
         try {
             writeSettings();
             loadSettings();
-        } catch (IOException | JSONException e) {
+        } catch (IOException | JSONException e)
+        {
             e.printStackTrace();
         }
     }
@@ -132,12 +132,12 @@ public class BaseBot extends ListenerAdapter implements Bot {
             log.warn("This bot is not member of any guilds!");
         }
     }
-    private void checkForBotInThisGuild(JDA jda)
+   /* private void checkForBotInThisGuild(JDA jda)
     {
         Guild otherBots = jda.getGuildById(110373943822540800L);
         if (otherBots == null) return;
         //if ()
-    }
+    }*/
     @Override
     public BotConfig getBotConfig()
     {
@@ -153,5 +153,18 @@ public class BaseBot extends ListenerAdapter implements Bot {
     @Override
     public Map<String, ChatCommandIF> getCommand() {
         return commands;
+    }
+
+    /**
+     * Define and setting default audio manager
+     * For base realization use {@link DefaultAudioPlayerManager}
+     * @see AudioPlayerManager
+     * */
+
+    private void setupAudioManager()
+    {
+        AudioSourceManagers.registerRemoteSources(audioManager);
+        AudioSourceManagers.registerLocalSource(audioManager);
+        audioManager.source(YoutubeAudioSourceManager.class).setPlaylistPageCount(10);
     }
 }
