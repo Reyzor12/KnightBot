@@ -8,19 +8,22 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 /**
+ * Show all commands in chat for {@link Bot}
+ * @see DefaultChatCommand
+ * @see ChatCommandIF
  * @author Reyzor
  * @version 1.0
  * @since 03.06.2018
  */
 
 @Service
-public class ShowAllChatCommand implements ChatCommandIF
+public class ShowAllChatCommand extends DefaultChatCommand implements ChatCommandIF
 {
-    private final static String commandApply = "commands";
-    private Map<String, ChatCommandIF> commands;
-    private ChatCommandIF nextCommand;
-    private String response;
+    private final static String commandApply = "list";
+
     private Bot bot;
+    private Map<String, ChatCommandIF> commands;
+    private String response;
 
     @Autowired
     public ShowAllChatCommand(Bot bot)
@@ -29,15 +32,10 @@ public class ShowAllChatCommand implements ChatCommandIF
         this.bot.addCommand(commandApply, this);
     }
 
-
-    public void setNext(ChatCommandIF nextCommand)
-    {
-        this.nextCommand = nextCommand;
-    }
-
+    @Override
     public void execute(MessageReceivedEvent event, String command)
     {
-        commands = bot.addCommand(commandApply, this);
+        commands = bot.getCommand();
         if (response == null)
         {
             StringBuilder sb = new StringBuilder("Список команд для KnightBot:\n");
@@ -50,7 +48,6 @@ public class ShowAllChatCommand implements ChatCommandIF
                     );
             response = sb.toString();
         }
-
         event.getChannel().sendMessage(response).queue();
     }
 

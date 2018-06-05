@@ -1,6 +1,12 @@
 package com.reyzor.discordbotknight.configuration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
+ * Class stores setting for {@link com.reyzor.discordbotknight.bots.Bot}
+ * settings store in json fine
+ * main settings are: text id, voice id, role id, volume id, default play list and repeat mode
  * @author Reyzor
  * @version 1.0
  * @since 27.05.2018
@@ -8,7 +14,8 @@ package com.reyzor.discordbotknight.configuration;
 
 public class BotSettings
 {
-    public final static BotSettings DEFAULT_SETTINGS = new BotSettings(0l, 0l, 0l, 50, null, false);
+    private final static Logger      logger           = LoggerFactory.getLogger(BotSettings.class);
+    public  final static BotSettings DEFAULT_SETTINGS = new BotSettings(0l, 0l, 0l, 50, null, false);
 
     private long textId;
     private long voiceId;
@@ -37,6 +44,10 @@ public class BotSettings
         this.repeatMode = repeatMode;
     }
 
+    /**
+     * Default realization of parser to long from string
+     * */
+
     private Long setSettingFromStringToLong(String setting)
     {
         try
@@ -44,6 +55,7 @@ public class BotSettings
             return Long.parseLong(setting);
         } catch (NumberFormatException e)
         {
+            logger.warn("unsupported value of setting = " + setting, e);
             return 0l;
         }
     }

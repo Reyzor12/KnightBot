@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Arrays;
 
 /**
+ * Class for initialization of context configuration
  * @author Reyzor
  * @version 1.0
  * @since 26.05.2018

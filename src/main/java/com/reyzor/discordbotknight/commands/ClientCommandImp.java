@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 /**
+ * Implementation of interface {@link ClientCommand} and {@link EventListener}
+ * realization of all actions, which {@link Bot} can perform
  * @author Reyzor
  * @version 1.0
  * @since 02.06.2018
@@ -30,15 +32,11 @@ public class ClientCommandImp implements EventListener, ClientCommand
     private ShowAllChatCommand showAllChatCommand;
 
     private Bot bot;
-    private Map<String, ChatCommandIF> commands;
-
-    public ClientCommandImp() {}
 
     @Autowired
     public ClientCommandImp(Bot bot)
     {
         this.bot = bot;
-        this.commands = bot.getCommand();
     }
 
     @Override
@@ -71,7 +69,7 @@ public class ClientCommandImp implements EventListener, ClientCommand
     {
         if (!isMessageFromBot(event))
         {
-            if(isCommandForBot(event) && !commands.isEmpty())
+            if(isCommandForBot(event) && bot.getCommand().isEmpty())
             {
                 showAllChatCommand.execute(event, event.getMessage().getContentRaw());
             }
@@ -108,31 +106,15 @@ public class ClientCommandImp implements EventListener, ClientCommand
         return event.getAuthor().isBot() ? true : false;
     }
 
+    /**
+     * Method get message from event, then check rawContent on present prefix {@link Bot:prefix} - command
+     * @see MessageReceivedEvent
+     * */
+
     private boolean isCommandForBot(MessageReceivedEvent event)
     {
         final Message message = event.getMessage();
         final String rawContent = message.getContentRaw();
-        if (bot != null && rawContent.startsWith(bot.getBotConfig().getPrefix()))
-        {
-            return true;
-        }
-        return false;
+        return (bot != null && rawContent.startsWith(bot.getBotConfig().getPrefix())) ? true : false;
     }
-
-    public Map<String, ChatCommandIF> getCommands()
-    {
-        return this.commands;
-    }
-
-    public void setCommands(Map<String, ChatCommandIF> commands)
-    {
-        if (this.commands != null)
-        {
-            this.commands.clear();
-            this.commands.putAll(commands);
-        } else {
-            this.commands = commands;
-        }
-    }
-
 }

@@ -12,6 +12,9 @@ import net.dv8tion.jda.core.entities.Game;
 import javax.security.auth.login.LoginException;
 
 /**
+ * Main class - start app
+ * In main spring context is checked and after that initialize
+ * when run bot
  * @author Reyzor
  * @version 1.0
  * @since 26.05.2018
@@ -30,9 +33,9 @@ public class KnightDiscordBot
         try
         {
             new JDABuilder(AccountType.BOT)
-                    .setToken("NDQxMTk3NDEzMDA1NTI0OTk0.Dcs4ow.hbSSeX8kAJr4b2yI4LbgdG-5pXA")
-                    .setAudioEnabled(true)
-                    .setGame(Game.playing("Minecraft"))
+                    .setToken(bot.getBotConfig().getToken())
+                    .setAudioEnabled(bot.getBotConfig().getAudioEnable())
+                    .setGame(Game.playing(bot.getBotConfig().getGame()))
                     .setStatus(OnlineStatus.DO_NOT_DISTURB)
                     .addEventListener(bot)
                     .addEventListener(context.getApplicationContext().getBean(COMMAND_BEAN) )
