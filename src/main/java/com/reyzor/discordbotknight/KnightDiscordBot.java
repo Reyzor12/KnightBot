@@ -24,17 +24,18 @@ public class KnightDiscordBot
 {
     private static final Class  CONFIGURATION_CLASS = ContextConfiguration.class;
     private static final String COMMAND_BEAN        = "clientCommand";
+    private static final String BASE_BOT = "baseBot";
     private static Bot bot;
     private static Context context;
 
     public static void main(String[] args) {
         if (!initContext(CONFIGURATION_CLASS)) return;
-        bot = new BaseBot();
+        bot = (BaseBot) context.getApplicationContext().getBean(BASE_BOT);
         try
         {
             new JDABuilder(AccountType.BOT)
                     .setToken(bot.getBotConfig().getToken())
-                    .setAudioEnabled(bot.getBotConfig().getAudioEnable())
+                    .setAudioEnabled(true)
                     .setGame(Game.playing(bot.getBotConfig().getGame()))
                     .setStatus(OnlineStatus.DO_NOT_DISTURB)
                     .addEventListener(bot)

@@ -19,13 +19,13 @@ public class BotConfig
 {
     @Value("${prefix}")
     private String prefix;
-    @Value("token")
+    @Value("${token}")
     private String token;
-    @Value("audio_enable")
-    private Boolean audioEnable;
-    @Value("game")
+    @Value("${audio_enable}")
+    private String audioEnable;
+    @Value("${game}")
     private String game;
-    @Value("status")
+    @Value("${status}")
     private String status;
 
     public OnlineStatus getStatus() {
@@ -35,13 +35,14 @@ public class BotConfig
             case "idle" : return OnlineStatus.IDLE;
             case "dnd" : return OnlineStatus.DO_NOT_DISTURB;
             case "invisible" : return OnlineStatus.INVISIBLE;
-            case "offline"
+            case "offline" : return OnlineStatus.DO_NOT_DISTURB;
+            default : return OnlineStatus.UNKNOWN;
         }
     }
 
-    public String getGame() { return game; };
+    public String getGame() { return game; }
 
-    public Boolean getAudioEnable() { return audioEnable; }
+    public Boolean getAudioEnable() { return audioEnable.equals("true") ? true : false; }
 
     public String getToken() { return token; }
 

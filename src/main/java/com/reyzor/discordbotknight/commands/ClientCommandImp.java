@@ -1,7 +1,6 @@
 package com.reyzor.discordbotknight.commands;
 
 import com.reyzor.discordbotknight.bots.Bot;
-import com.reyzor.discordbotknight.commands.chatcommand.ChatCommandIF;
 import com.reyzor.discordbotknight.commands.chatcommand.ShowAllChatCommand;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.Event;
@@ -14,8 +13,6 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.core.hooks.EventListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
 
 /**
  * Implementation of interface {@link ClientCommand} and {@link EventListener}
@@ -69,9 +66,11 @@ public class ClientCommandImp implements EventListener, ClientCommand
     {
         if (!isMessageFromBot(event))
         {
-            if(isCommandForBot(event) && bot.getCommand().isEmpty())
+            if(isCommandForBot(event) && !bot.getCommand().isEmpty())
             {
-                showAllChatCommand.execute(event, event.getMessage().getContentRaw());
+                final String command = event.getMessage().getContentRaw().replace(bot.getBotConfig().getPrefix(),"");
+                //showAllChatCommand.execute(event, event.getMessage().getContentRaw());
+                bot.getCommand().get(command).execute(event, command);
             }
         }
     }

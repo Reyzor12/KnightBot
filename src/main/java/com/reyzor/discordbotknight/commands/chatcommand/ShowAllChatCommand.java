@@ -44,7 +44,7 @@ public class ShowAllChatCommand extends DefaultChatCommand implements ChatComman
                     .stream()
                     .forEach(
                             currentCommand -> sb
-                                    .append(bot.getBotConfig().getPrefix() + currentCommand + " - " + commands.get(currentCommand).info())
+                                    .append(bot.getBotConfig().getPrefix() + currentCommand + " - " + commands.get(currentCommand).info() + "\n")
                     );
             response = sb.toString();
         }
