@@ -145,6 +145,12 @@ public class BaseBot extends ListenerAdapter implements Bot {
     }
 
     @Override
+    public BotSettings getBotSettings(Guild guild)
+    {
+        return botSettings.getOrDefault(guild.getId(), BotSettings.DEFAULT_SETTINGS);
+    }
+
+    @Override
     public Map<String, ChatCommandIF> addCommand(String command, ChatCommandIF executor) {
         commands.putIfAbsent(command,executor);
         return commands;
@@ -167,4 +173,6 @@ public class BaseBot extends ListenerAdapter implements Bot {
         AudioSourceManagers.registerLocalSource(audioManager);
         audioManager.source(YoutubeAudioSourceManager.class).setPlaylistPageCount(10);
     }
+
+
 }
