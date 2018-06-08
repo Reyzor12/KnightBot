@@ -51,6 +51,11 @@ public class ShowAllChatCommand extends DefaultChatCommand implements ChatComman
         event.getChannel().sendMessage(response).queue();
     }
 
+    public static String getCommandApply()
+    {
+        return commandApply;
+    }
+
     @Override
     public String info() {
         return "все команды для бота";

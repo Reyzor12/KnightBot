@@ -1,11 +1,16 @@
 package com.reyzor.discordbotknight.commands.chatcommand;
 
+import com.reyzor.discordbotknight.audio.AudioHandler;
+import com.reyzor.discordbotknight.audio.ResultHandler;
 import com.reyzor.discordbotknight.bots.Bot;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Command for start play playlist from chat command
@@ -32,8 +37,35 @@ public class PlayMusicChatCommand extends DefaultChatCommand implements ChatComm
     @Override
     public void execute(MessageReceivedEvent event, String command)
     {
-        final String url = command.substring(commandApply.length()+1);
-
+        super.event = event;
+        final List<String> args = getArgs(command);
+        if (args.isEmpty())
+        {
+            AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+            System.out.println(args);
+            if (handler != null && handler.getAudioPlayer().getPlayingTrack() != null && handler.getAudioPlayer().isPaused())
+            {
+                System.out.println("INNER");
+                boolean isDJ = event.getMember().hasPermission(Permission.MANAGE_SERVER);
+                if (!isDJ) event.getMember().getRoles().contains(event.getGuild().getRoleById(bot.getBotSettings(event.getGuild()).getRoleId()));
+                if (!isDJ) event.getMessage().editMessage("Не каждый лишь может добавлять музыку на сервер").queue();
+                else
+                {
+                    handler.getAudioPlayer().setPaused(false);
+                    event.getMessage().editMessage("Продолжение " + handler.getAudioPlayer().getPlayingTrack().getInfo().title + " **").queue();
+                }
+                return;
+            }
+            StringBuilder sb = new StringBuilder("Не правильно введена команда \n");
+            sb.append(bot.getBotConfig().getPrefix() + commandApply + " ССЫЛКА_НА_ЮТУБ_МУЗЫКУ ");
+            event.getChannel().sendMessage(sb.toString()).queue();
+            return;
+        }
+        final String url = args.get(0);
+        event
+                .getChannel()
+                .sendMessage("Загрузка трека ** " + url + " **")
+                .queue(message -> bot.getAudioManager().loadItemOrdered(event.getGuild(), url, new ResultHandler(message, this, bot, false)));
     }
 
     @Override

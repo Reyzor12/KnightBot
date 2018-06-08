@@ -68,9 +68,16 @@ public class ClientCommandImp implements EventListener, ClientCommand
         {
             if(isCommandForBot(event) && !bot.getCommand().isEmpty())
             {
-                final String command = event.getMessage().getContentRaw().replace(bot.getBotConfig().getPrefix(),"");
-                //showAllChatCommand.execute(event, event.getMessage().getContentRaw());
-                bot.getCommand().get(command).execute(event, command);
+                final String commandMessage = event.getMessage().getContentRaw().replace(bot.getBotConfig().getPrefix(),"");
+                final String command = event.getMessage().getContentRaw().replace(bot.getBotConfig().getPrefix(),"").split(" ")[0];
+                if (bot.getCommand().containsKey(command)) bot.getCommand().get(command).execute(event, commandMessage);
+                else
+                {
+                    StringBuilder sb = new StringBuilder("Такой команды нет у данного бота!\n");
+                    sb.append("посмотреть список команд можно введя команду ");
+                    sb.append(bot.getBotConfig().getPrefix() + "list");
+                    event.getChannel().sendMessage(sb.toString()).queue();
+                }
             }
         }
     }

@@ -1,12 +1,15 @@
 package com.reyzor.discordbotknight.bots;
 
+import com.reyzor.discordbotknight.audio.AudioHandler;
 import com.reyzor.discordbotknight.commands.chatcommand.ChatCommandIF;
 import com.reyzor.discordbotknight.configuration.BotConfig;
 import com.reyzor.discordbotknight.configuration.BotSettings;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Guild;
@@ -151,6 +154,11 @@ public class BaseBot extends ListenerAdapter implements Bot {
     }
 
     @Override
+    public int queueTrack(ChatCommandIF command, AudioTrack track) {
+        return setUpHandler(command).addTrack(track, command.getAuthor());
+    }
+
+    @Override
     public Map<String, ChatCommandIF> addCommand(String command, ChatCommandIF executor) {
         commands.putIfAbsent(command,executor);
         return commands;
@@ -174,5 +182,23 @@ public class BaseBot extends ListenerAdapter implements Bot {
         audioManager.source(YoutubeAudioSourceManager.class).setPlaylistPageCount(10);
     }
 
+    public AudioHandler setUpHandler(ChatCommandIF command)
+    {
+        return setUpHandler(command.getGuild());
+    }
 
+    public AudioHandler setUpHandler(Guild guild)
+    {
+        AudioHandler handler;
+        if (guild.getAudioManager().getSendingHandler() == null)
+        {
+            AudioPlayer player = audioManager.createPlayer();
+            if (botSettings.containsKey(guild.getId())) player.setVolume(botSettings.get(guild.getId()).getVolume());
+            handler = new AudioHandler(player, this, guild);
+            player.addListener(handler);
+            guild.getAudioManager().setSendingHandler(handler);
+        }
+        else handler = (AudioHandler) guild.getAudioManager().getSendingHandler();
+        return handler;
+    }
 }

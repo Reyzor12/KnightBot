@@ -6,6 +6,7 @@ import com.reyzor.discordbotknight.utils.SpecificQueue;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
 import net.dv8tion.jda.core.audio.AudioSendHandler;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.User;
@@ -28,6 +29,9 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
     private Long userId;
     private final SpecificQueue<QueueableTrack> queue;
     private final List<AudioTrack> defaultQueue;
+    private AudioFrame lastFrame;
+    public static boolean STAY_IN_CHANNEL;
+    public static long MAX_SECONDS = -1;
 
 
     public AudioHandler(AudioPlayer audioPlayer, Bot bot, Guild guild)
@@ -96,21 +100,36 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
             return false;
         }
         final Playlist tempPlaylist = Playlist.loadPlaylist(bot.getBotSettings(guild).getDefaultPlaylist());
-        if (tempPlaylist == null || tempPlaylist.getItems().isEmpty())
+        if (tempPlaylist == null || tempPlaylist.getItems().isEmpty()) return false;
+        tempPlaylist.loadTracks(bot.getAudioManager(), at ->
+        {
+            if (audioPlayer.getPlayingTrack() == null) audioPlayer.playTrack(at);
+            else defaultQueue.add(at);
+        }, () ->
+        {
+            if (tempPlaylist.getTracks().isEmpty() && !STAY_IN_CHANNEL) guild.getAudioManager().closeAudioConnection();
+        });
+        return true;
+    }
+
+    public static boolean isTooLong(AudioTrack track)
+    {
+        return MAX_SECONDS <= 0 ? false : Math.round(track.getDuration()/1000.0) > MAX_SECONDS;
     }
 
     @Override
     public boolean canProvide() {
-        return false;
+        lastFrame = audioPlayer.provide();
+        return lastFrame != null;
     }
 
     @Override
     public byte[] provide20MsAudio() {
-        return new byte[0];
+        return lastFrame.data;
     }
 
     @Override
     public boolean isOpus() {
-        return false;
+        return true;
     }
 }

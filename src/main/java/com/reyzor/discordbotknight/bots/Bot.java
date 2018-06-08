@@ -4,6 +4,7 @@ import com.reyzor.discordbotknight.commands.chatcommand.ChatCommandIF;
 import com.reyzor.discordbotknight.configuration.BotConfig;
 import com.reyzor.discordbotknight.configuration.BotSettings;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -62,4 +63,6 @@ public interface Bot {
     BotConfig getBotConfig();
 
     BotSettings getBotSettings(Guild guild);
+
+    int queueTrack(ChatCommandIF command, AudioTrack track);
 }

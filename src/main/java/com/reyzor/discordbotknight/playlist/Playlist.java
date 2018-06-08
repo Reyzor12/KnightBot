@@ -1,6 +1,7 @@
 package com.reyzor.discordbotknight.playlist;
 
 
+import com.reyzor.discordbotknight.audio.AudioHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
@@ -30,6 +31,9 @@ public class Playlist
     private final boolean shuffle;
     private List<PlaylistLoadError> errors;
     private List<AudioTrack> tracks;
+    private final static String TOO_LONG = "Этот трек слишком длинный";
+    private final static String NO_MATCHES = "Совпадений не найдено";
+    private final static String LOAD_FAIL = "Ошибка загрузки трека ";
 
     private Playlist(String name, List<String> items, boolean shuffle)
     {
@@ -53,22 +57,77 @@ public class Playlist
                     @Override
                     public void trackLoaded(AudioTrack track)
                     {
-                        if (AudioHandler)
+                        if (AudioHandler.isTooLong(track))
+                            errors.add(new PlaylistLoadError(index, items.get(index), TOO_LONG));
+                        else
+                        {
+                            tracks.add(track);
+                            consumer.accept(track);
+                        }
+                        if (last && callback != null) callback.run();
                     }
 
                     @Override
-                    public void playlistLoaded(AudioPlaylist playlist) {
-
+                    public void playlistLoaded(AudioPlaylist playlist)
+                    {
+                        if (playlist.isSearchResult())
+                        {
+                            final AudioTrack firstTrack = playlist.getTracks().get(0);
+                            if (AudioHandler.isTooLong(firstTrack))
+                            {
+                                errors.add(new PlaylistLoadError(index, items.get(index), TOO_LONG));
+                            }
+                            else
+                            {
+                                tracks.add(firstTrack);
+                                consumer.accept(firstTrack);
+                            }
+                        }
+                        else if (playlist.getSelectedTrack() != null)
+                        {
+                            final AudioTrack selectedTrack = playlist.getSelectedTrack();
+                            if (AudioHandler.isTooLong(selectedTrack))
+                            {
+                                errors.add(new PlaylistLoadError(index, items.get(index), TOO_LONG));
+                            }
+                            else
+                            {
+                                tracks.add(selectedTrack);
+                                consumer.accept(selectedTrack);
+                            }
+                        }
+                        else
+                        {
+                            final List<AudioTrack> loadedTracks = new ArrayList<>(playlist.getTracks());
+                            if (shuffle)
+                            {
+                                for (int first = 0; first < loadedTracks.size(); first++)
+                                {
+                                    int second = (int) Math.random()*loadedTracks.size();
+                                    AudioTrack tmp = loadedTracks.get(first);
+                                    loadedTracks.set(first, loadedTracks.get(second));
+                                    loadedTracks.set(second, tmp);
+                                }
+                            }
+                            loadedTracks.removeIf(track -> AudioHandler.isTooLong(track));
+                            tracks.addAll(loadedTracks);
+                            loadedTracks.stream().forEach(track -> consumer.accept(track));
+                        }
+                        if (last && callback != null) callback.run();
                     }
 
                     @Override
-                    public void noMatches() {
-
+                    public void noMatches()
+                    {
+                        errors.add(new PlaylistLoadError(index, items.get(index), NO_MATCHES));
+                        if (last && callback != null) callback.run();
                     }
 
                     @Override
-                    public void loadFailed(FriendlyException exception) {
-
+                    public void loadFailed(FriendlyException exception)
+                    {
+                        errors.add(new PlaylistLoadError(index, items.get(index), LOAD_FAIL + exception));
+                        if (last && callback != null) callback.run();
                     }
                 });
             }
@@ -138,5 +197,23 @@ public class Playlist
 
     public List<String> getItems() { return items; }
 
-    public class PlaylistLoadError{}
+    public List<AudioTrack> getTracks() { return tracks; }
+
+    public class PlaylistLoadError
+    {
+        private final int index;
+        private final String item;
+        private final String reason;
+
+        private PlaylistLoadError(Integer index, String item, String reason)
+        {
+            this.index = index;
+            this.item = item;
+            this.reason = reason;
+        }
+
+        public Integer getIndex() { return index; }
+        public String getItem() { return item; }
+        public String getReason() { return reason; }
+    }
 }
