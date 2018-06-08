@@ -1,6 +1,7 @@
 package com.reyzor.discordbotknight.commands.chatcommand;
 
 import com.reyzor.discordbotknight.bots.Bot;
+import com.reyzor.discordbotknight.utils.MessageUtil;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Channel;
 import net.dv8tion.jda.core.entities.TextChannel;
@@ -39,28 +40,32 @@ public class JoinToChatCommand extends DefaultChatCommand implements ChatCommand
     @Override
     public void execute(MessageReceivedEvent event, String command)
     {
-        if (!hasPermissionToJoinVoiceChannel(event))
+        //bot has permission to join voice channel
+        if (!MessageUtil.hasPermissionToJoinVoiceChannel(event))
         {
             event.getChannel().sendMessage(voicePermission).queue();
             return;
         }
-        final VoiceChannel voiceChannel = event.getMember().getVoiceState().getChannel();
-        if (voiceChannel == null)
+        //message from voice channel
+        if (MessageUtil.getVoiceChannel(event) == null)
         {
             event.getChannel().sendMessage(commandNotFromVoiceChat).queue();
             return;
         }
+        //audio enable
         if (!bot.getBotConfig().getAudioEnable())
         {
             event.getChannel().sendMessage(botNotSupportedAudio).queue();
         }
         final AudioManager audioManager = event.getGuild().getAudioManager();
+        //try connect
         if (audioManager.isAttemptingToConnect())
         {
             event.getChannel().sendMessage(botIsTryingToConnect).queue();
             return;
         }
-        audioManager.openAudioConnection(voiceChannel);
+        //open audio connection
+        audioManager.openAudioConnection(MessageUtil.getVoiceChannel(event));
         event.getChannel().sendMessage(botConnectedToVoiceChannel).queue();
     }
 
@@ -68,14 +73,5 @@ public class JoinToChatCommand extends DefaultChatCommand implements ChatCommand
     public String info()
     {
         return "присоединить бота к каналу";
-    }
-
-    /**
-     * Check permission for join to voice channel
-     * */
-
-    public boolean hasPermissionToJoinVoiceChannel(MessageReceivedEvent event)
-    {
-        return event.getGuild().getSelfMember().hasPermission((TextChannel)event.getChannel(), Permission.VOICE_CONNECT);
     }
 }

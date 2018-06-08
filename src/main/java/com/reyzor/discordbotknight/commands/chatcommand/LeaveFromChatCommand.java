@@ -1,6 +1,7 @@
 package com.reyzor.discordbotknight.commands.chatcommand;
 
 import com.reyzor.discordbotknight.bots.Bot;
+import com.reyzor.discordbotknight.utils.MessageUtil;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.slf4j.Logger;
@@ -36,7 +37,7 @@ public class LeaveFromChatCommand extends DefaultChatCommand implements ChatComm
     @Override
     public void execute(MessageReceivedEvent event, String command)
     {
-        final VoiceChannel connectedChannel = event.getGuild().getSelfMember().getVoiceState().getChannel();
+        final VoiceChannel connectedChannel = MessageUtil.getVoiceChannel(event);
         if (connectedChannel == null)
         {
             event.getChannel().sendMessage(notInVoiceChannel).queue();

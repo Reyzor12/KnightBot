@@ -2,6 +2,7 @@ package com.reyzor.discordbotknight.audio;
 
 import com.reyzor.discordbotknight.bots.Bot;
 import com.reyzor.discordbotknight.commands.chatcommand.ChatCommandIF;
+import com.reyzor.discordbotknight.playlist.Playlist;
 import com.reyzor.discordbotknight.utils.MessageUtil;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
@@ -9,7 +10,10 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.entities.Message;
 
+import java.util.ArrayList;
+
 /**
+ * Class implements interface {@link AudioLoadResultHandler} - Handles the result of loading an item from an audio player manager
  * @author reyzor
  * @version 1.0
  * @since 08.06.2018
@@ -73,7 +77,7 @@ public class ResultHandler implements AudioLoadResultHandler
     {
         if (youtubeSearch)
         {
-            message.editMessage("Ничего по запросу найти не удалось");
+            message.editMessage("Ничего по запросу найти не удалось").queue();
         }
         else
         {
@@ -109,7 +113,11 @@ public class ResultHandler implements AudioLoadResultHandler
         sb.append(MessageUtil.formatTimeTrack(track.getDuration()));
         sb.append("}` ");
         sb.append((pos == 0 ? "начало воспроизведения ..." : "на позицию " + pos +" в трек лист "));
-        message.editMessage(sb.toString()).queue();
+        if (playlist == null) message.editMessage(sb.toString()).queue();
+        else
+        {
+            loadPlaylist(playlist, track);
+        }
     }
 
     private int loadPlaylist(AudioPlaylist playlist, AudioTrack track)

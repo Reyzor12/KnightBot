@@ -8,7 +8,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
  * @version 1.0
  * @since 07.06.2018
  */
-public class QueueableTrack implements  Queueable
+public class QueueableTrack implements Queueable
 {
     private final AudioTrack track;
     private final long owner;

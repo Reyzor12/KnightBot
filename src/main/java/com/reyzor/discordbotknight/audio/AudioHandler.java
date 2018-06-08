@@ -3,6 +3,7 @@ package com.reyzor.discordbotknight.audio;
 import com.reyzor.discordbotknight.bots.Bot;
 import com.reyzor.discordbotknight.playlist.Playlist;
 import com.reyzor.discordbotknight.utils.SpecificQueue;
+import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -15,7 +16,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Audio service for play tracks and some help stuff
+ * Audio player for discord
+ * Interface {@link AudioSendHandler} used to send audio to Discord through JDA.
+ * Abstract class {@link AudioEventAdapter } for different event handlers as method overrides
+ * So this class use discord to send audio
+ * @see AudioEventAdapter
+ * @see AudioSendHandler
  * @author reyzor
  * @version 1.0
  * @since 07.06.2018
@@ -66,6 +72,10 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
 
     public SpecificQueue<QueueableTrack> getQueue() { return queue; }
 
+    /**
+     * Clear queue of track (playlist) and stop current track
+     * */
+
     public void stopAndClear()
     {
         queue.clear();
@@ -87,6 +97,10 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
     {
         return userId;
     }
+
+    /**
+     * play default playlist {@link Playlist}
+     * */
 
     public boolean playFromDefault()
     {

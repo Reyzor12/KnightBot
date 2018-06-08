@@ -27,20 +27,6 @@ public class SpecificQueue<T extends Queueable> implements QueueOfTracking<T> {
     {
         list.add(item);
         return list.size() - 1 ;
-        /*int lastIndex;
-        for (lastIndex = list.size() - 1; lastIndex > -1; lastIndex--)
-        {
-            if (list.get(lastIndex).getIdentifier() == item.getIdentifier()) break;
-        }
-        lastIndex++;
-        set.clear();
-        for (; lastIndex < list.size(); lastIndex ++)
-        {
-            if (set.contains(list.get(lastIndex).getIdentifier())) break;
-            set.add(list.get(lastIndex).getIdentifier());
-        }
-        list.add(lastIndex, item);
-        return lastIndex;*/
     }
 
     @Override
