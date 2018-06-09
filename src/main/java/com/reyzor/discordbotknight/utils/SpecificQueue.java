@@ -33,4 +33,15 @@ public class SpecificQueue<T extends Queueable> implements QueueOfTracking<T> {
     public void clear() {
         list.clear();
     }
+
+    @Override
+    public T next() {
+        return list.isEmpty() ? null : list.remove(0);
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+        return list.isEmpty();
+    }
 }

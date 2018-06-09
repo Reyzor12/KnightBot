@@ -3,10 +3,10 @@ package com.reyzor.discordbotknight.audio;
 import com.reyzor.discordbotknight.bots.Bot;
 import com.reyzor.discordbotknight.playlist.Playlist;
 import com.reyzor.discordbotknight.utils.SpecificQueue;
-import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
 import net.dv8tion.jda.core.audio.AudioSendHandler;
 import net.dv8tion.jda.core.entities.Guild;
@@ -70,6 +70,25 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
         }
     }
 
+    @Override
+    public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason)
+    {
+        super.onTrackEnd(player, track, endReason);
+        if (!this.queue.isEmpty())
+        {
+            audioPlayer.playTrack(this.queue.next().getTrack());
+        }
+    }
+
+    @Override
+    public void onTrackStart(AudioPlayer player, AudioTrack track) {
+        super.onTrackStart(player, track);
+        StringBuilder sb = new StringBuilder("Композиция **");
+        sb.append(track.getInfo().title);
+        sb.append("** начинает проигрываться ...");
+        guild.getDefaultChannel().sendMessage(sb.toString()).queue();
+    }
+
     public SpecificQueue<QueueableTrack> getQueue() { return queue; }
 
     /**
@@ -81,6 +100,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
         queue.clear();
         defaultQueue.clear();
         audioPlayer.stopTrack();
+        audioPlayer.setPaused(false);
     }
 
     public boolean isMusicPlaying()

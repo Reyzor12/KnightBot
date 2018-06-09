@@ -1,5 +1,6 @@
 package com.reyzor.discordbotknight.commands.chatcommand;
 
+import com.reyzor.discordbotknight.audio.AudioHandler;
 import com.reyzor.discordbotknight.bots.Bot;
 import com.reyzor.discordbotknight.utils.MessageUtil;
 import net.dv8tion.jda.core.entities.VoiceChannel;
@@ -43,6 +44,7 @@ public class LeaveFromChatCommand extends DefaultChatCommand implements ChatComm
             event.getChannel().sendMessage(notInVoiceChannel).queue();
             return;
         }
+        ((AudioHandler)event.getGuild().getAudioManager().getSendingHandler()).stopAndClear();
         event.getGuild().getAudioManager().closeAudioConnection();
         event.getChannel().sendMessage(leaveVoiceChannel).queue();
     }

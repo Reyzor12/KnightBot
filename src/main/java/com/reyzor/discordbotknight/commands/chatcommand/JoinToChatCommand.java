@@ -1,5 +1,6 @@
 package com.reyzor.discordbotknight.commands.chatcommand;
 
+import com.reyzor.discordbotknight.audio.AudioHandler;
 import com.reyzor.discordbotknight.bots.Bot;
 import com.reyzor.discordbotknight.utils.MessageUtil;
 import net.dv8tion.jda.core.Permission;
