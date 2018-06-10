@@ -1,12 +1,9 @@
 package com.reyzor.discordbotknight.commands.chatcommand;
 
-import com.reyzor.discordbotknight.audio.AudioHandler;
 import com.reyzor.discordbotknight.bots.Bot;
 import com.reyzor.discordbotknight.utils.MessageUtil;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Channel;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.VoiceChannel;
+import com.reyzor.discordbotknight.utils.ResponseMessage;
+import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.managers.AudioManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +20,6 @@ import org.springframework.stereotype.Service;
 public class JoinToChatCommand extends DefaultChatCommand implements ChatCommandIF
 {
     private final static String commandApply = "join";
-    private final static String voicePermission = "У бота нет прав на доспук к голосовому чату";
-    private final static String commandNotFromVoiceChat = "Вы не состоите ни в одном голосовом чате";
-    private final static String botIsTryingToConnect = "Бот уже пытается присоединиться к чату";
-    private final static String botConnectedToVoiceChannel = "Бот подключен к голосовому чату";
-    private final static String botNotSupportedAudio = "Бот не поддерживает аудио";
 
     @Autowired
     public JoinToChatCommand(Bot bot)
@@ -39,33 +31,39 @@ public class JoinToChatCommand extends DefaultChatCommand implements ChatCommand
     @Override
     public void execute(MessageReceivedEvent event, String command)
     {
+        final MessageChannel channel = event.getChannel();
+        if (!MessageUtil.checkPermission(event)) {
+            channel.sendMessage(ResponseMessage.USER_NOT_PERMISSION.getMessage()).queue();
+            return;
+        }
         //bot has permission to join voice channel
         if (!MessageUtil.hasPermissionToJoinVoiceChannel(event))
         {
-            event.getChannel().sendMessage(voicePermission).queue();
+            channel.sendMessage(ResponseMessage.BOT_PERMISSION_JOIN_VOICE_CHANNEL.getMessage()).queue();
             return;
         }
         //message from voice channel
-        if (MessageUtil.getVoiceChannel(event) == null)
+        if (!MessageUtil.checkMemberVoiceChatConnection(event))
         {
-            event.getChannel().sendMessage(commandNotFromVoiceChat).queue();
+            channel.sendMessage(ResponseMessage.USER_NOT_IN_VOICE_CHANNEL.getMessage()).queue();
             return;
         }
         //audio enable
         if (!bot.getBotConfig().getAudioEnable())
         {
-            event.getChannel().sendMessage(botNotSupportedAudio).queue();
+            channel.sendMessage(ResponseMessage.BOT_CANT_USE_AUDIO.getMessage()).queue();
+            return;
         }
         final AudioManager audioManager = event.getGuild().getAudioManager();
         //try connect
         if (audioManager.isAttemptingToConnect())
         {
-            event.getChannel().sendMessage(botIsTryingToConnect).queue();
+            channel.sendMessage(ResponseMessage.BOT_ALREADY_TRY_JOIN_CHANNEL.getMessage()).queue();
             return;
         }
         //open audio connection
         audioManager.openAudioConnection(MessageUtil.getVoiceChannel(event));
-        event.getChannel().sendMessage(botConnectedToVoiceChannel).queue();
+        channel.sendMessage(ResponseMessage.BOT_CONNECT_TO_VOICE_CHANNEL.getMessage()).queue();
     }
 
     @Override

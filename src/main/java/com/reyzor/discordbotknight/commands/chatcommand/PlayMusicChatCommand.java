@@ -4,9 +4,8 @@ import com.reyzor.discordbotknight.audio.AudioHandler;
 import com.reyzor.discordbotknight.audio.ResultHandler;
 import com.reyzor.discordbotknight.bots.Bot;
 import com.reyzor.discordbotknight.utils.MessageUtil;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.ChannelType;
-import net.dv8tion.jda.core.entities.TextChannel;
+import com.reyzor.discordbotknight.utils.ResponseMessage;
+import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,46 +37,45 @@ public class PlayMusicChatCommand extends DefaultChatCommand implements ChatComm
     @Override
     public void execute(MessageReceivedEvent event, String command)
     {
-        //check command from voice channel
-        if (MessageUtil.getVoiceChannel(event) != null)
-        {
-            //check bot in voice chat
-            if (event.getGuild().getAudioManager().isConnected())
+        final MessageChannel channel = event.getChannel();
+        if (MessageUtil.checkPermission(event)) {
+            //check command from voice channel
+            if (MessageUtil.checkMemberVoiceChatConnection(event))
             {
-                super.event = event;
-                final List<String> args = getArgs(command);
-                //command don't have argument
-                if (args.isEmpty())
+                //check bot in voice chat
+                if (MessageUtil.checkBotVoiceChatConnection(event))
                 {
-                    //set AudioHandler
-                    //audioManager setup in class BaseBot method setUpHandler
-                    AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
-                    //if method setUpHandler invoke early and track playing and its on pause
-                    //when check permission and start play
-                    if (handler != null && handler.getAudioPlayer().getPlayingTrack() != null && handler.getAudioPlayer().isPaused())
+                    super.event = event;
+                    final List<String> args = getArgs(command);
+                    //command don't have argument
+                    if (args.isEmpty())
                     {
-                        boolean isDJ = event.getMember().hasPermission(Permission.MANAGE_SERVER);
-                        if (!isDJ) event.getMember().getRoles().contains(event.getGuild().getRoleById(bot.getBotSettings(event.getGuild()).getRoleId()));
-                        if (!isDJ) event.getMessage().editMessage("Не каждый лишь может добавлять музыку на сервер").queue();
-                        else
+                        //set AudioHandler
+                        //audioManager setup in class BaseBot method setUpHandler
+                        AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+                        //if method setUpHandler invoke early and track playing and its on pause
+                        //when check permission and start play
+                        if (handler != null && handler.getAudioPlayer().getPlayingTrack() != null && handler.getAudioPlayer().isPaused())
                         {
                             handler.getAudioPlayer().setPaused(false);
-                            event.getChannel().sendMessage("Продолжение " + handler.getAudioPlayer().getPlayingTrack().getInfo().title + " **").queue();
+                            event.getChannel().sendMessage("Продолжение **" + handler.getAudioPlayer().getPlayingTrack().getInfo().title + " **").queue();
+                            return;
                         }
+                        StringBuilder sb = new StringBuilder("Не правильно введена команда \n");
+                        sb.append(bot.getBotConfig().getPrefix() + commandApply);
+                        sb.append(" youtube_url или \n");
+                        sb.append(bot.getBotConfig().getPrefix() + commandApply);
+                        sb.append(" чтобы продолжить воспроизведение");
+                        event.getChannel().sendMessage(sb.toString()).queue();
                         return;
                     }
-                    StringBuilder sb = new StringBuilder("Не правильно введена команда \n");
-                    sb.append(bot.getBotConfig().getPrefix() + commandApply + " ССЫЛКА_НА_ЮТУБ_МУЗЫКУ ");
-                    event.getChannel().sendMessage(sb.toString()).queue();
-                    return;
-                }
-                final String url = args.get(0);
-                event
-                        .getChannel()
-                        .sendMessage("Загрузка трека ** " + url + " **")
-                        .queue(message -> bot.getAudioManager().loadItemOrdered(event.getGuild(), url, new ResultHandler(message, this, bot, false)));
-            } else event.getChannel().sendMessage("Бот не в голосовом чате!").queue();
-        } else event.getChannel().sendMessage("Вы не в голосовом чате!").queue();
+                    final String url = args.get(0);
+                    channel
+                            .sendMessage("Загрузка трека ** " + url + " **")
+                            .queue(message -> bot.getAudioManager().loadItemOrdered(event.getGuild(), url, new ResultHandler(message, this, bot, false)));
+                } else channel.sendMessage(ResponseMessage.BOT_NOT_IN_VOICE_CHANNEL.getMessage()).queue();
+            } else channel.sendMessage(ResponseMessage.USER_NOT_IN_VOICE_CHANNEL.getMessage()).queue();
+        } else channel.sendMessage(ResponseMessage.USER_NOT_PERMISSION.getMessage()).queue();
     }
 
     @Override

@@ -5,6 +5,8 @@ import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
+import java.util.List;
+
 /**
  * Class for work with message form JDA
  * @author reyzor
@@ -46,7 +48,32 @@ public class MessageUtil
     }
 
     /**
-     * Command for check permission to use command {@link com.reyzor.discordbotknight.commands.chatcommand.ChatCommandIF}
-     *
+     * Command for check permission to use command {@link com.reyzor.discordbotknight.commands.chatcommand.ChatCommandIF}     *
      * */
+
+    public static boolean checkPermission (MessageReceivedEvent event)
+    {
+        final List<Permission> permissionList = event.getMember().getPermissions();
+        return (permissionList.contains(Permission.ADMINISTRATOR) || permissionList.contains(Permission.MANAGE_CHANNEL)) ? true : false;
+    }
+
+    /**
+     * Command for check connection to voice channel {@link VoiceChannel} for
+     * user {@link net.dv8tion.jda.core.entities.User}
+     * */
+
+    public static boolean checkMemberVoiceChatConnection(MessageReceivedEvent event)
+    {
+        return event.getMember().getVoiceState().getChannel() == null ? false : true;
+    }
+
+    /**
+     * Command for check connection to voice channel {@link VoiceChannel} for
+     * bot {@link com.reyzor.discordbotknight.bots.Bot}
+     * */
+
+    public static boolean checkBotVoiceChatConnection(MessageReceivedEvent event)
+    {
+        return event.getGuild().getAudioManager().isConnected() ? true : false;
+    }
 }

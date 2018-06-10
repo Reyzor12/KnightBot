@@ -2,13 +2,12 @@ package com.reyzor.discordbotknight.commands.chatcommand;
 
 import com.reyzor.discordbotknight.audio.AudioHandler;
 import com.reyzor.discordbotknight.bots.Bot;
-import net.dv8tion.jda.core.Permission;
+import com.reyzor.discordbotknight.utils.MessageUtil;
+import com.reyzor.discordbotknight.utils.ResponseMessage;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * Command for pause for playing music from {@link com.reyzor.discordbotknight.bots.Bot}
@@ -32,23 +31,23 @@ public class PauseMusicChatCommand extends DefaultChatCommand implements ChatCom
     @Override
     public void execute(MessageReceivedEvent event, String command)
     {
-        List<Permission> permissionList = event.getMember().getPermissions();
-        MessageChannel channel = event.getChannel();
-        if (permissionList.contains(Permission.ADMINISTRATOR) || permissionList.contains(Permission.MANAGE_CHANNEL)) {
-            if (event.getMember().getVoiceState().getChannel() != null)
+        final MessageChannel channel = event.getChannel();
+        if (MessageUtil.checkPermission(event)) {
+            if (MessageUtil.checkMemberVoiceChatConnection(event))
             {
-                if (event.getGuild().getAudioManager().isConnected())
+                if (MessageUtil.checkBotVoiceChatConnection(event))
                 {
                     AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
                     if (handler != null && handler.getAudioPlayer().getPlayingTrack() != null && !handler.getAudioPlayer().isPaused())
                     {
                         handler.getAudioPlayer().setPaused(true);
+                        channel.sendMessage(ResponseMessage.BOT_ON_PAUSE.getMessage()).queue();
                     }
-                } else channel.sendMessage("Бот не подключен к голосовому чату").queue();
+                } else channel.sendMessage(ResponseMessage.BOT_NOT_IN_VOICE_CHANNEL.getMessage()).queue();
             }
-            else channel.sendMessage("Вы не подключины к голосовому чату").queue();
+            else channel.sendMessage(ResponseMessage.USER_NOT_IN_VOICE_CHANNEL.getMessage()).queue();
         }
-        else channel.sendMessage("У тебя тут нет силы!").queue();
+        else channel.sendMessage(ResponseMessage.USER_NOT_PERMISSION.getMessage()).queue();
     }
 
     @Override

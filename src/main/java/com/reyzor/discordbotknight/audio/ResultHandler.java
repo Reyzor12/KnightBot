@@ -2,15 +2,12 @@ package com.reyzor.discordbotknight.audio;
 
 import com.reyzor.discordbotknight.bots.Bot;
 import com.reyzor.discordbotknight.commands.chatcommand.ChatCommandIF;
-import com.reyzor.discordbotknight.playlist.Playlist;
 import com.reyzor.discordbotknight.utils.MessageUtil;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.entities.Message;
-
-import java.util.ArrayList;
 
 /**
  * Class implements interface {@link AudioLoadResultHandler} - Handles the result of loading an item from an audio player manager

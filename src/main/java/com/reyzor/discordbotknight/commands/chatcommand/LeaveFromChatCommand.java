@@ -3,6 +3,8 @@ package com.reyzor.discordbotknight.commands.chatcommand;
 import com.reyzor.discordbotknight.audio.AudioHandler;
 import com.reyzor.discordbotknight.bots.Bot;
 import com.reyzor.discordbotknight.utils.MessageUtil;
+import com.reyzor.discordbotknight.utils.ResponseMessage;
+import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.slf4j.Logger;
@@ -23,8 +25,6 @@ public class LeaveFromChatCommand extends DefaultChatCommand implements ChatComm
     private final static Logger logger = LoggerFactory.getLogger(LeaveFromChatCommand.class);
 
     private final static String commandApply = "leave";
-    private final static String notInVoiceChannel = "Бот не в голосовом канале";
-    private final static String leaveVoiceChannel = "Бот покинул голосовой чат";
 
     @Autowired
     public LeaveFromChatCommand(Bot bot)
@@ -36,15 +36,26 @@ public class LeaveFromChatCommand extends DefaultChatCommand implements ChatComm
     @Override
     public void execute(MessageReceivedEvent event, String command)
     {
-        final VoiceChannel connectedChannel = MessageUtil.getVoiceChannel(event);
-        if (connectedChannel == null)
+        final MessageChannel channel = event.getChannel();
+        if (!MessageUtil.checkPermission(event))
         {
-            event.getChannel().sendMessage(notInVoiceChannel).queue();
+            channel.sendMessage(ResponseMessage.USER_NOT_PERMISSION.getMessage()).queue();
+            return;
+        }
+        final VoiceChannel connectedChannel = MessageUtil.getVoiceChannel(event);
+        if (!MessageUtil.checkMemberVoiceChatConnection(event))
+        {
+            channel.sendMessage(ResponseMessage.USER_NOT_IN_VOICE_CHANNEL.getMessage()).queue();
+            return;
+        }
+        if (!MessageUtil.checkBotVoiceChatConnection(event))
+        {
+            channel.sendMessage(ResponseMessage.BOT_NOT_IN_VOICE_CHANNEL.getMessage()).queue();
             return;
         }
         ((AudioHandler)event.getGuild().getAudioManager().getSendingHandler()).stopAndClear();
         event.getGuild().getAudioManager().closeAudioConnection();
-        event.getChannel().sendMessage(leaveVoiceChannel).queue();
+        channel.sendMessage(ResponseMessage.BOT_LEAVE_VOICE_CHANNEL.getMessage()).queue();
     }
 
     @Override

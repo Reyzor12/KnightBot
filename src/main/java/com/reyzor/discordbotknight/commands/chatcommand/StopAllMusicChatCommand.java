@@ -1,6 +1,11 @@
 package com.reyzor.discordbotknight.commands.chatcommand;
 
+import com.reyzor.discordbotknight.audio.AudioHandler;
 import com.reyzor.discordbotknight.bots.Bot;
+import com.reyzor.discordbotknight.utils.MessageUtil;
+import com.reyzor.discordbotknight.utils.ResponseMessage;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +38,27 @@ public class StopAllMusicChatCommand extends DefaultChatCommand implements ChatC
     @Override
     public void execute(MessageReceivedEvent event, String command)
     {
-        if ()
+        final MessageChannel channel = event.getChannel();
+        if (MessageUtil.checkPermission(event))
+        {
+            if (MessageUtil.checkMemberVoiceChatConnection(event))
+            {
+                if (MessageUtil.checkBotVoiceChatConnection(event))
+                {
+                    final AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+                    if (handler != null)
+                    {
+                        final AudioPlayer player = handler.getAudioPlayer();
+                        if (player.getPlayingTrack() != null && !player.isPaused())
+                        {
+                            player.isPaused();
+                        }
+                        handler.stopAndClear();
+                        channel.sendMessage("Воспроизведение остановлено, список треков очищен!").queue();
+                    }
+                } else channel.sendMessage(ResponseMessage.BOT_NOT_IN_VOICE_CHANNEL.getMessage()).queue();
+            } else channel.sendMessage(ResponseMessage.USER_NOT_IN_VOICE_CHANNEL.getMessage()).queue();
+        } else channel.sendMessage(ResponseMessage.USER_NOT_PERMISSION.getMessage()).queue();
     }
 
     @Override

@@ -44,4 +44,10 @@ public class SpecificQueue<T extends Queueable> implements QueueOfTracking<T> {
     {
         return list.isEmpty();
     }
+
+    @Override
+    public List<T> getAll()
+    {
+        return list;
+    }
 }
