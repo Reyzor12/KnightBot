@@ -1,5 +1,6 @@
 package com.reyzor.discordbotknight.commands.chatcommand;
 
+import com.reyzor.discordbotknight.bots.Bot;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -20,6 +21,12 @@ public abstract class DefaultChatCommand implements ChatCommandIF
 {
     protected ChatCommandIF nextCommand;
     protected MessageReceivedEvent event;
+    protected Bot bot;
+
+    public DefaultChatCommand(Bot bot)
+    {
+        this.bot = bot;
+    }
 
     @Override
     public void setNext(ChatCommandIF nextCommand)

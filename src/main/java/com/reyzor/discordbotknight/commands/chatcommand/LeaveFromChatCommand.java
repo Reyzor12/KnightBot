@@ -26,13 +26,11 @@ public class LeaveFromChatCommand extends DefaultChatCommand implements ChatComm
     private final static String notInVoiceChannel = "Бот не в голосовом канале";
     private final static String leaveVoiceChannel = "Бот покинул голосовой чат";
 
-    private Bot bot;
-
     @Autowired
     public LeaveFromChatCommand(Bot bot)
     {
-        this.bot = bot;
-        this.bot.addCommand(commandApply, this);
+        super(bot);
+        super.bot.addCommand(commandApply, this);
     }
 
     @Override
@@ -52,6 +50,6 @@ public class LeaveFromChatCommand extends DefaultChatCommand implements ChatComm
     @Override
     public String info()
     {
-        return "покинуть голосовой чат";
+        return "- покинуть голосовой чат";
     }
 }

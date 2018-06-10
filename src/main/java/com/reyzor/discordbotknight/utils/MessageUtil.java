@@ -44,4 +44,9 @@ public class MessageUtil
     {
         return event.getMember().getVoiceState().getChannel();
     }
+
+    /**
+     * Command for check permission to use command {@link com.reyzor.discordbotknight.commands.chatcommand.ChatCommandIF}
+     *
+     * */
 }

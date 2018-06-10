@@ -22,13 +22,11 @@ public class PauseMusicChatCommand extends DefaultChatCommand implements ChatCom
 {
     private final static String commandApply = "pause";
 
-    private Bot bot;
-
     @Autowired
     public PauseMusicChatCommand(Bot bot)
     {
-        this.bot = bot;
-        this.bot.addCommand(commandApply, this);
+        super(bot);
+        super.bot.addCommand(commandApply, this);
     }
 
     @Override
@@ -56,6 +54,6 @@ public class PauseMusicChatCommand extends DefaultChatCommand implements ChatCom
     @Override
     public String info()
     {
-        return "поставить на паузу воспроизведения текущего трека";
+        return "- поставить на паузу воспроизведения текущего трека";
     }
 }

@@ -29,13 +29,11 @@ public class JoinToChatCommand extends DefaultChatCommand implements ChatCommand
     private final static String botConnectedToVoiceChannel = "Бот подключен к голосовому чату";
     private final static String botNotSupportedAudio = "Бот не поддерживает аудио";
 
-    private Bot bot;
-
     @Autowired
     public JoinToChatCommand(Bot bot)
     {
-        this.bot = bot;
-        this.bot.addCommand(commandApply, this);
+        super(bot);
+        super.bot.addCommand(commandApply, this);
     }
 
     @Override
@@ -73,6 +71,6 @@ public class JoinToChatCommand extends DefaultChatCommand implements ChatCommand
     @Override
     public String info()
     {
-        return "присоединить бота к каналу";
+        return "- присоединить бота к каналу";
     }
 }

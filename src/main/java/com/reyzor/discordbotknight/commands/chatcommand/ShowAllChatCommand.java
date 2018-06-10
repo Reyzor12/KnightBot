@@ -21,15 +21,14 @@ public class ShowAllChatCommand extends DefaultChatCommand implements ChatComman
 {
     private final static String commandApply = "list";
 
-    private Bot bot;
     private Map<String, ChatCommandIF> commands;
     private String response;
 
     @Autowired
     public ShowAllChatCommand(Bot bot)
     {
-        this.bot = bot;
-        this.bot.addCommand(commandApply, this);
+        super(bot);
+        super.bot.addCommand(commandApply, this);
     }
 
     @Override
@@ -44,7 +43,7 @@ public class ShowAllChatCommand extends DefaultChatCommand implements ChatComman
                     .stream()
                     .forEach(
                             currentCommand -> sb
-                                    .append(bot.getBotConfig().getPrefix() + currentCommand + " - " + commands.get(currentCommand).info() + "\n")
+                                    .append(bot.getBotConfig().getPrefix() + currentCommand + "  " + commands.get(currentCommand).info() + "\n")
                     );
             response = sb.toString();
         }
@@ -58,6 +57,6 @@ public class ShowAllChatCommand extends DefaultChatCommand implements ChatComman
 
     @Override
     public String info() {
-        return "все команды для бота";
+        return "- все команды для бота";
     }
 }

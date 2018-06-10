@@ -28,13 +28,11 @@ public class PlayMusicChatCommand extends DefaultChatCommand implements ChatComm
 
     private static final String commandApply = "play";
 
-    private Bot bot;
-
     @Autowired
     public PlayMusicChatCommand(Bot bot)
     {
-        this.bot = bot;
-        this.bot.addCommand(commandApply, this);
+        super(bot);
+        super.bot.addCommand(commandApply, this);
     }
 
     @Override
@@ -64,7 +62,7 @@ public class PlayMusicChatCommand extends DefaultChatCommand implements ChatComm
                         else
                         {
                             handler.getAudioPlayer().setPaused(false);
-                            event.getMessage().editMessage("Продолжение " + handler.getAudioPlayer().getPlayingTrack().getInfo().title + " **").queue();
+                            event.getChannel().sendMessage("Продолжение " + handler.getAudioPlayer().getPlayingTrack().getInfo().title + " **").queue();
                         }
                         return;
                     }
@@ -84,6 +82,6 @@ public class PlayMusicChatCommand extends DefaultChatCommand implements ChatComm
 
     @Override
     public String info() {
-        return "команда для воспроизведения музыки";
+        return "youtube_url - команда для воспроизведения музыки с youtube или без url для продолжения воспроизведения";
     }
 }
