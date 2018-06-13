@@ -106,7 +106,7 @@ public class MessageUtil
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(getColorForLiftBorderMessage());
         builder.setAuthor("Knight Bot", null, LinkStorage.IDEA.getUrl());
-        builder.setFooter(LinkStorage.TRADE_MARK, LinkStorage.PICKACHU.getUrl());
+        builder.setFooter(LinkStorage.TRADE_MARK, LinkStorage.AUTHOR.getUrl());
         builder.setThumbnail(LinkStorage.PICKACHU.getUrl());
         return builder;
     }
@@ -120,6 +120,8 @@ public class MessageUtil
     public static EmbedBuilder getInfoMessage(String message)
     {
         if (builderMessage == null) builderMessage = getTemplateBuilder();
+        builderMessage.setTitle(null);
+        builderMessage.clearFields();
         builderMessage.addField(message,"",false);
         return builderMessage;
     }

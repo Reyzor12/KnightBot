@@ -8,7 +8,8 @@ package com.reyzor.discordbotknight.utils;
 public enum LinkStorage
 {
     PICKACHU("https://raw.githubusercontent.com/Reyzor12/KnightBot/develop/src/main/resources/icons/pokemon.png"),
-    IDEA("https://raw.githubusercontent.com/Reyzor12/KnightBot/develop/src/main/resources/icons/idea.png");
+    IDEA("https://raw.githubusercontent.com/Reyzor12/KnightBot/develop/src/main/resources/icons/idea.png"),
+    AUTHOR("https://raw.githubusercontent.com/Reyzor12/KnightBot/develop/src/main/resources/icons/default.png");
 
     public static final String TRADE_MARK = "Reyzor\u2122";
 

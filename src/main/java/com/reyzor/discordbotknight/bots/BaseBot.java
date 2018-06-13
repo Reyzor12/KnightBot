@@ -128,12 +128,12 @@ public class BaseBot extends ListenerAdapter implements Bot {
     public void onReady(ReadyEvent event)
     {
         this.jda = event.getJDA();
-        try {
+       /* try {
             this.jda.getSelfUser().getManager().setAvatar(Icon.from(getClass().getClassLoader().getResourceAsStream(DEFAULT_AVATAR_PATH))).complete();
             this.jda.getSelfUser().getManager().setName(BOT_NAME).complete();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         checkGuild(this.jda);
     }
 

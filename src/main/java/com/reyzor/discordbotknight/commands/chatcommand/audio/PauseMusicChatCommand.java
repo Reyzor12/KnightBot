@@ -43,13 +43,13 @@ public class PauseMusicChatCommand extends DefaultChatCommand implements ChatCom
                     if (handler != null && handler.getAudioPlayer().getPlayingTrack() != null && !handler.getAudioPlayer().isPaused())
                     {
                         handler.getAudioPlayer().setPaused(true);
-                        channel.sendMessage(ResponseMessage.BOT_ON_PAUSE.getMessage()).queue();
+                        channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_ON_PAUSE.getMessage()).build()).queue();
                     }
-                } else channel.sendMessage(ResponseMessage.BOT_NOT_IN_VOICE_CHANNEL.getMessage()).queue();
+                } else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_NOT_IN_VOICE_CHANNEL.getMessage()).build()).queue();
             }
-            else channel.sendMessage(ResponseMessage.USER_NOT_IN_VOICE_CHANNEL.getMessage()).queue();
+            else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.USER_NOT_IN_VOICE_CHANNEL.getMessage()).build()).queue();
         }
-        else channel.sendMessage(ResponseMessage.USER_NOT_PERMISSION.getMessage()).queue();
+        else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.USER_NOT_PERMISSION.getMessage()).build()).queue();
     }
 
     @Override

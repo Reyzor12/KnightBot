@@ -7,6 +7,7 @@ import com.reyzor.discordbotknight.commands.chatcommand.DefaultChatCommand;
 import com.reyzor.discordbotknight.utils.MessageUtil;
 import com.reyzor.discordbotknight.utils.ResponseMessage;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,18 +46,18 @@ public class CurrentTrackChatCommand extends DefaultChatCommand implements ChatC
                     final AudioTrack track = handler.getAudioPlayer().getPlayingTrack();
                     if (track != null)
                     {
-                        StringBuilder sb = new StringBuilder("Текущий трек:\n");
-                        sb.append("**");
-                        sb.append(track.getInfo().title);
-                        sb.append("**\nПродолжительность ");
+                        StringBuilder sb = new StringBuilder("Продолжительность :\n");
                         sb.append(MessageUtil.formatTimeTrack(track.getDuration()));
                         sb.append("\n Автор ");
                         sb.append(track.getInfo().author);
-                        channel.sendMessage(sb.toString()).queue();
-                    } else channel.sendMessage(ResponseMessage.BOT_NOT_PLAY_TRACK.getMessage()).queue();
+                        EmbedBuilder builder = MessageUtil.getTemplateBuilder();
+                        builder.setTitle("Текущий трек: ");
+                        builder.addField("**" + track.getInfo().title + "** ", sb.toString(), false);
+                        channel.sendMessage(builder.build()).queue();
+                    } else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_NOT_PLAY_TRACK.getMessage()).build()).queue();
                 }
-            } else channel.sendMessage(ResponseMessage.BOT_NOT_IN_VOICE_CHANNEL.getMessage()).queue();
-        } else channel.sendMessage(ResponseMessage.BOT_NOT_IN_VOICE_CHANNEL.getMessage()).queue();
+            } else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_NOT_IN_VOICE_CHANNEL.getMessage()).build()).queue();
+        } else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_NOT_IN_VOICE_CHANNEL.getMessage()).build()).queue();
     }
 
     @Override

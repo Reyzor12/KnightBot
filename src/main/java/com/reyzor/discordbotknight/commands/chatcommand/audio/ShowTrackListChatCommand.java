@@ -9,6 +9,7 @@ import com.reyzor.discordbotknight.utils.MessageUtil;
 import com.reyzor.discordbotknight.utils.ResponseMessage;
 import com.reyzor.discordbotknight.utils.SpecificQueue;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,26 +46,24 @@ public class ShowTrackListChatCommand extends DefaultChatCommand implements Chat
                 if (handler != null)
                 {
                     SpecificQueue<QueueableTrack> queue = handler.getQueue();
-                    if (queue.isEmpty()) channel.sendMessage("Трек лист пуст!").queue();
+                    if (queue.isEmpty()) channel.sendMessage(MessageUtil.getInfoMessage("Трек лист пуст!").build()).queue();
                     else
                     {
-                        StringBuilder sb = new StringBuilder("Список треков:\n");
+                        EmbedBuilder builder = MessageUtil.getTemplateBuilder();
+                        builder.setTitle("Список треков: ");
                         int i = 0;
                         for (QueueableTrack track : queue.getAll())
                         {
                             i++;
-                            sb.append(i);
-                            sb.append(". - **");
-                            sb.append(track.getTrack().getInfo().title);
-                            sb.append("** продолжительность ");
-                            sb.append(MessageUtil.formatTimeTrack(track.getTrack().getDuration()));
-                            sb.append("\n");
+                            builder.addField(
+                                    i + ". - **" + track.getTrack().getInfo().title + "** ",
+                                    "продолжительность " + MessageUtil.formatTimeTrack(track.getTrack().getDuration()), true);
                         }
-                        channel.sendMessage(sb.toString()).queue();
+                        channel.sendMessage(builder.build()).queue();
                     }
-                } else channel.sendMessage("Трек лист пуст!").queue();
-            } else channel.sendMessage(ResponseMessage.BOT_NOT_IN_VOICE_CHANNEL.getMessage()).queue();
-        } else channel.sendMessage(ResponseMessage.USER_NOT_IN_VOICE_CHANNEL.getMessage()).queue();
+                } else channel.sendMessage(MessageUtil.getInfoMessage("Трек лист пуст!").build()).queue();
+            } else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_NOT_IN_VOICE_CHANNEL.getMessage()).build()).queue();
+        } else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.USER_NOT_IN_VOICE_CHANNEL.getMessage()).build()).queue();
     }
 
     @Override

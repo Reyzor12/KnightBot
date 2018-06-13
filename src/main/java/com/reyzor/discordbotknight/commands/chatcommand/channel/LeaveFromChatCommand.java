@@ -41,23 +41,23 @@ public class LeaveFromChatCommand extends DefaultChatCommand implements ChatComm
         final MessageChannel channel = event.getChannel();
         if (!MessageUtil.checkPermission(event))
         {
-            channel.sendMessage(ResponseMessage.USER_NOT_PERMISSION.getMessage()).queue();
+            channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.USER_NOT_PERMISSION.getMessage()).build()).queue();
             return;
         }
         final VoiceChannel connectedChannel = MessageUtil.getVoiceChannel(event);
         if (!MessageUtil.checkMemberVoiceChatConnection(event))
         {
-            channel.sendMessage(ResponseMessage.USER_NOT_IN_VOICE_CHANNEL.getMessage()).queue();
+            channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.USER_NOT_IN_VOICE_CHANNEL.getMessage()).build()).queue();
             return;
         }
         if (!MessageUtil.checkBotVoiceChatConnection(event))
         {
-            channel.sendMessage(ResponseMessage.BOT_NOT_IN_VOICE_CHANNEL.getMessage()).queue();
+            channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_NOT_IN_VOICE_CHANNEL.getMessage()).build()).queue();
             return;
         }
         ((AudioHandler)event.getGuild().getAudioManager().getSendingHandler()).stopAndClear();
         event.getGuild().getAudioManager().closeAudioConnection();
-        channel.sendMessage(ResponseMessage.BOT_LEAVE_VOICE_CHANNEL.getMessage()).queue();
+        channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_LEAVE_VOICE_CHANNEL.getMessage()).build()).queue();
     }
 
     @Override

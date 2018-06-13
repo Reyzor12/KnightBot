@@ -56,11 +56,11 @@ public class StopAllMusicChatCommand extends DefaultChatCommand implements ChatC
                             player.isPaused();
                         }
                         handler.stopAndClear();
-                        channel.sendMessage("Воспроизведение остановлено, список треков очищен!").queue();
+                        channel.sendMessage(MessageUtil.getInfoMessage("Воспроизведение остановлено, список треков очищен!").build()).queue();
                     }
-                } else channel.sendMessage(ResponseMessage.BOT_NOT_IN_VOICE_CHANNEL.getMessage()).queue();
-            } else channel.sendMessage(ResponseMessage.USER_NOT_IN_VOICE_CHANNEL.getMessage()).queue();
-        } else channel.sendMessage(ResponseMessage.USER_NOT_PERMISSION.getMessage()).queue();
+                } else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_NOT_IN_VOICE_CHANNEL.getMessage()).build()).queue();
+            } else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.USER_NOT_IN_VOICE_CHANNEL.getMessage()).build()).queue();
+        } else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.USER_NOT_PERMISSION.getMessage()).build()).queue();
     }
 
     @Override

@@ -60,7 +60,7 @@ public class PlayMusicChatCommand extends DefaultChatCommand implements ChatComm
                         if (handler != null && handler.getAudioPlayer().getPlayingTrack() != null && handler.getAudioPlayer().isPaused())
                         {
                             handler.getAudioPlayer().setPaused(false);
-                            event.getChannel().sendMessage("Продолжение **" + handler.getAudioPlayer().getPlayingTrack().getInfo().title + " **").queue();
+                            event.getChannel().sendMessage(MessageUtil.getInfoMessage("Продолжение **" + handler.getAudioPlayer().getPlayingTrack().getInfo().title + " **").build()).queue();
                             return;
                         }
                         StringBuilder sb = new StringBuilder("Не правильно введена команда \n");
@@ -68,16 +68,16 @@ public class PlayMusicChatCommand extends DefaultChatCommand implements ChatComm
                         sb.append(" youtube_url или \n");
                         sb.append(bot.getBotConfig().getPrefix() + commandApply);
                         sb.append(" чтобы продолжить воспроизведение");
-                        event.getChannel().sendMessage(sb.toString()).queue();
+                        event.getChannel().sendMessage(MessageUtil.getInfoMessage(sb.toString()).build()).queue();
                         return;
                     }
                     final String url = args.get(0);
                     channel
-                            .sendMessage("Загрузка трека ** " + url + " **")
+                            .sendMessage(MessageUtil.getInfoMessage("Загрузка трека ** " + url + " **").build())
                             .queue(message -> bot.getAudioManager().loadItemOrdered(event.getGuild(), url, new ResultHandler(message, this, bot, false)));
-                } else channel.sendMessage(ResponseMessage.BOT_NOT_IN_VOICE_CHANNEL.getMessage()).queue();
-            } else channel.sendMessage(ResponseMessage.USER_NOT_IN_VOICE_CHANNEL.getMessage()).queue();
-        } else channel.sendMessage(ResponseMessage.USER_NOT_PERMISSION.getMessage()).queue();
+                } else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_NOT_IN_VOICE_CHANNEL.getMessage()).build()).queue();
+            } else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.USER_NOT_IN_VOICE_CHANNEL.getMessage()).build()).queue();
+        } else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.USER_NOT_PERMISSION.getMessage()).build()).queue();
     }
 
     @Override
