@@ -1,8 +1,10 @@
-package com.reyzor.discordbotknight.commands.chatcommand;
+package com.reyzor.discordbotknight.commands.chatcommand.audio;
 
 import com.reyzor.discordbotknight.audio.AudioHandler;
 import com.reyzor.discordbotknight.audio.QueueableTrack;
 import com.reyzor.discordbotknight.bots.Bot;
+import com.reyzor.discordbotknight.commands.chatcommand.ChatCommandIF;
+import com.reyzor.discordbotknight.commands.chatcommand.DefaultChatCommand;
 import com.reyzor.discordbotknight.utils.MessageUtil;
 import com.reyzor.discordbotknight.utils.ResponseMessage;
 import com.reyzor.discordbotknight.utils.SpecificQueue;
