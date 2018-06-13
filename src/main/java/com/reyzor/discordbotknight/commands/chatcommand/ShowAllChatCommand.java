@@ -51,7 +51,8 @@ public class ShowAllChatCommand extends DefaultChatCommand implements ChatComman
                             currentCommand -> builder.addField(bot.getBotConfig().getPrefix() + currentCommand, commands.get(currentCommand).info(), false)
                     );
             builder.addBlankField(false);
-            builder.setAuthor("Knight Bot", null, );
+            builder.setAuthor("Knight Bot", null, "https://raw.githubusercontent.com/Reyzor12/KnightBot/develop/src/main/resources/idea.png");
+            builder.setFooter("\u2122 Reyzor", "https://raw.githubusercontent.com/Reyzor12/KnightBot/develop/src/main/resources/idea.png" );
 
         }
         event.getChannel().sendMessage(builder.build()).queue();
