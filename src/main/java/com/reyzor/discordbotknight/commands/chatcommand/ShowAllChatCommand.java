@@ -51,7 +51,7 @@ public class ShowAllChatCommand extends DefaultChatCommand implements ChatComman
                             currentCommand -> builder.addField(bot.getBotConfig().getPrefix() + currentCommand, commands.get(currentCommand).info(), false)
                     );
             builder.addBlankField(false);
-            builder.setAuthor("Knight", null, getClass().getClassLoader().getResource("test.ico").getPath());
+            builder.setAuthor("Knight Bot", null, );
 
         }
         event.getChannel().sendMessage(builder.build()).queue();
