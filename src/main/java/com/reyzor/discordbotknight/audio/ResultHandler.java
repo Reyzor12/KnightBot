@@ -57,14 +57,14 @@ public class ResultHandler implements AudioLoadResultHandler
                 sb.append(playlist.getName() == null ? "" : "(**" + playlist.getName() + "**) ");
                 sb.append("привышают максимум (`");
                 sb.append(MessageUtil.formatTimeTrack(AudioHandler.MAX_SECONDS*1000) + "`)");
-                message.editMessage(sb.toString()).queue();
+                message.getChannel().sendMessage(MessageUtil.getInfoMessage(sb.toString()).build()).queue();
             } else
             {
                 StringBuilder sb = new StringBuilder("Найден ");
                 sb.append(playlist.getName() == null ? "плейлист с`" : "плейлист (**" + playlist.getName() + "**) с `");
                 sb.append(playlist.getTracks().size());
                 sb.append("` треками, трек успешно добавлен");
-                message.editMessage(sb.toString()).queue();
+                message.getChannel().sendMessage(MessageUtil.getInfoMessage(sb.toString()).build()).queue();
             }
         }
     }
@@ -74,7 +74,7 @@ public class ResultHandler implements AudioLoadResultHandler
     {
         if (youtubeSearch)
         {
-            message.editMessage("Ничего по запросу найти не удалось").queue();
+            message.getChannel().sendMessage(MessageUtil.getInfoMessage("Ничего по запросу найти не удалось").build()).queue();
         }
         else
         {
@@ -85,7 +85,7 @@ public class ResultHandler implements AudioLoadResultHandler
     @Override
     public void loadFailed(FriendlyException exception)
     {
-        message.editMessage("Не получилось загрузить трек").queue();
+        message.getChannel().sendMessage(MessageUtil.getInfoMessage("Не получилось загрузить трек").build()).queue();
     }
 
     private void loadSingleTrack(AudioTrack track, AudioPlaylist playlist)
@@ -99,7 +99,7 @@ public class ResultHandler implements AudioLoadResultHandler
             sb.append(" > ");
             sb.append(MessageUtil.formatTimeTrack(AudioHandler.MAX_SECONDS*1000));
             sb.append(" ¯ \\ _ (ツ) _ / ¯ ");
-            message.editMessage(sb.toString()).queue();
+            message.getChannel().sendMessage(MessageUtil.getInfoMessage(sb.toString()).build()).queue();
             return;
         }
         int pos = bot.queueTrack(command, track) + 1;
@@ -110,7 +110,7 @@ public class ResultHandler implements AudioLoadResultHandler
         sb.append(MessageUtil.formatTimeTrack(track.getDuration()));
         sb.append("}` ");
         sb.append((pos == 0 ? "начало воспроизведения ..." : "на позицию " + pos +" в трек лист "));
-        if (playlist == null) message.editMessage(sb.toString()).queue();
+        if (playlist == null) message.getChannel().sendMessage(MessageUtil.getInfoMessage(sb.toString()).build()).queue();
         else
         {
             loadPlaylist(playlist, track);

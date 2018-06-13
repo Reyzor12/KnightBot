@@ -15,6 +15,7 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Icon;
+import net.dv8tion.jda.core.entities.SelfUser;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.json.JSONException;
@@ -128,12 +129,18 @@ public class BaseBot extends ListenerAdapter implements Bot {
     public void onReady(ReadyEvent event)
     {
         this.jda = event.getJDA();
-       /* try {
-            this.jda.getSelfUser().getManager().setAvatar(Icon.from(getClass().getClassLoader().getResourceAsStream(DEFAULT_AVATAR_PATH))).complete();
-            this.jda.getSelfUser().getManager().setName(BOT_NAME).complete();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
+        final SelfUser user = this.jda.getSelfUser();
+        if (user.getDefaultAvatarId().equals(user.getAvatarId()))
+        {
+            try
+            {
+                this.jda.getSelfUser().getManager().setAvatar(Icon.from(getClass().getClassLoader().getResourceAsStream(DEFAULT_AVATAR_PATH))).complete();
+                this.jda.getSelfUser().getManager().setName(BOT_NAME).complete();
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
         checkGuild(this.jda);
     }
 

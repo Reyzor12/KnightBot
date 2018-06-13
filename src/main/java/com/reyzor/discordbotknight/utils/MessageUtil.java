@@ -9,6 +9,10 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.awt.*;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.util.List;
 
@@ -124,5 +128,24 @@ public class MessageUtil
         builderMessage.clearFields();
         builderMessage.addField(message,"",false);
         return builderMessage;
+    }
+
+    /**
+     * Method get url, connect to site and return input stream of resource
+     * @param url - string - url to resource at the Internet
+     * @return {@link InputStream} - resource from Internet
+     * */
+    public static InputStream getSource(String url)
+    {
+        if (url == null) return null;
+        try {
+            URL iUrl = new URL(url);
+            URLConnection connection = iUrl.openConnection();
+            connection.setRequestProperty("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.112 Safari/537.36");
+            return connection.getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
