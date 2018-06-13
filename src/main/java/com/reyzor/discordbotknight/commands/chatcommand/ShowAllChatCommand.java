@@ -1,6 +1,8 @@
 package com.reyzor.discordbotknight.commands.chatcommand;
 
 import com.reyzor.discordbotknight.bots.Bot;
+import com.reyzor.discordbotknight.utils.LinkStorage;
+import com.reyzor.discordbotknight.utils.MessageUtil;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,9 +41,8 @@ public class ShowAllChatCommand extends DefaultChatCommand implements ChatComman
         commands = bot.getCommand();
         if (builder == null)
         {
-            builder = new EmbedBuilder();
-            builder.setTitle("Список команд для чат бота KnightBot", null);
-            builder.setColor(new Color(66, 244, 86));
+            builder = MessageUtil.getTemplateBuilder();
+            builder.setTitle("Список команд для чат бота KnightBot");
             builder.setDescription("Для ввода аудио команд необходимо добавить бота в аудио канал." +
                     " Ввод всех команд начинается с " + bot.getBotConfig().getPrefix());
             commands
@@ -51,9 +52,6 @@ public class ShowAllChatCommand extends DefaultChatCommand implements ChatComman
                             currentCommand -> builder.addField(bot.getBotConfig().getPrefix() + currentCommand, commands.get(currentCommand).info(), false)
                     );
             builder.addBlankField(false);
-            builder.setAuthor("Knight Bot", null, "https://raw.githubusercontent.com/Reyzor12/KnightBot/develop/src/main/resources/idea.png");
-            builder.setFooter("\u2122 Reyzor", "https://raw.githubusercontent.com/Reyzor12/KnightBot/develop/src/main/resources/idea.png" );
-
         }
         event.getChannel().sendMessage(builder.build()).queue();
     }

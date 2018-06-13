@@ -1,10 +1,15 @@
 package com.reyzor.discordbotknight.utils;
 
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.core.entities.Icon;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
+import java.awt.*;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 /**
@@ -15,6 +20,9 @@ import java.util.List;
  */
 public class MessageUtil
 {
+    private static Color leftBorderColor;
+    private static EmbedBuilder builderMessage;
+
     /**
      * Function from long to String in format hours:minutes:seconds
      * */
@@ -75,5 +83,44 @@ public class MessageUtil
     public static boolean checkBotVoiceChatConnection(MessageReceivedEvent event)
     {
         return event.getGuild().getAudioManager().isConnected() ? true : false;
+    }
+
+    /**
+     * Get Color for Message left border
+     * */
+
+    public static Color getColorForLiftBorderMessage()
+    {
+        if (leftBorderColor == null) leftBorderColor = new Color(66, 244, 86);
+        return leftBorderColor;
+    }
+
+    /**
+     * default template for all message {@link net.dv8tion.jda.core.entities.Message}
+     * in chat from bot {@link com.reyzor.discordbotknight.bots.Bot}
+     * @return {@link EmbedBuilder}
+     * */
+
+    public static EmbedBuilder getTemplateBuilder()
+    {
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setColor(getColorForLiftBorderMessage());
+        builder.setAuthor("Knight Bot", null, LinkStorage.IDEA.getUrl());
+        builder.setFooter(LinkStorage.TRADE_MARK, LinkStorage.PICKACHU.getUrl());
+        builder.setThumbnail(LinkStorage.PICKACHU.getUrl());
+        return builder;
+    }
+
+    /**
+     *  Information from bot {@link com.reyzor.discordbotknight.bots.Bot}
+     *  formed {@link EmbedBuilder} for message {@link net.dv8tion.jda.core.entities.Message}
+     * @return {@link EmbedBuilder}
+     * */
+
+    public static EmbedBuilder getInfoMessage(String message)
+    {
+        if (builderMessage == null) builderMessage = getTemplateBuilder();
+        builderMessage.addField(message,"",false);
+        return builderMessage;
     }
 }

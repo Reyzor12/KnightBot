@@ -1,5 +1,6 @@
 package com.reyzor.discordbotknight.bots;
 
+import com.reyzor.discordbotknight.KnightDiscordBot;
 import com.reyzor.discordbotknight.audio.AudioHandler;
 import com.reyzor.discordbotknight.commands.chatcommand.ChatCommandIF;
 import com.reyzor.discordbotknight.configuration.BotConfig;
@@ -13,6 +14,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Icon;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.json.JSONException;
@@ -43,6 +45,8 @@ public class BaseBot extends ListenerAdapter implements Bot {
     private BotConfig config;
 
     private final static String SERVER_SETTINGS = "serversettings.json";
+    private final static String BOT_NAME = "KnightBot";
+    private final static String DEFAULT_AVATAR_PATH = "icons/pokemon.png";
 
     private final AudioPlayerManager audioManager;
     private final HashMap<String, BotSettings> botSettings;
@@ -124,6 +128,12 @@ public class BaseBot extends ListenerAdapter implements Bot {
     public void onReady(ReadyEvent event)
     {
         this.jda = event.getJDA();
+        try {
+            this.jda.getSelfUser().getManager().setAvatar(Icon.from(getClass().getClassLoader().getResourceAsStream(DEFAULT_AVATAR_PATH))).complete();
+            this.jda.getSelfUser().getManager().setName(BOT_NAME).complete();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         checkGuild(this.jda);
     }
 

@@ -4,12 +4,17 @@ import com.reyzor.discordbotknight.bots.BaseBot;
 import com.reyzor.discordbotknight.bots.Bot;
 import com.reyzor.discordbotknight.configuration.Context;
 import com.reyzor.discordbotknight.configuration.ContextConfiguration;
+import com.reyzor.discordbotknight.utils.MessageUtil;
 import net.dv8tion.jda.core.AccountType;
+import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.core.entities.Icon;
 
 import javax.security.auth.login.LoginException;
+import java.io.File;
+import java.nio.file.Files;
 
 /**
  * Main class - start app
@@ -33,13 +38,13 @@ public class KnightDiscordBot
         bot = (BaseBot) context.getApplicationContext().getBean(BASE_BOT);
         try
         {
-            new JDABuilder(AccountType.BOT)
+           new JDABuilder(AccountType.BOT)
                     .setToken(bot.getBotConfig().getToken())
                     .setAudioEnabled(true)
                     .setGame(Game.playing(bot.getBotConfig().getGame()))
                     .setStatus(OnlineStatus.DO_NOT_DISTURB)
                     .addEventListener(bot)
-                    .addEventListener(context.getApplicationContext().getBean(COMMAND_BEAN) )
+                    .addEventListener(context.getApplicationContext().getBean(COMMAND_BEAN))
                     .buildAsync();
         } catch (LoginException e) {
             e.printStackTrace();

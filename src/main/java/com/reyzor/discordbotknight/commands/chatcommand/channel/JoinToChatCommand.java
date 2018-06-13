@@ -35,37 +35,37 @@ public class JoinToChatCommand extends DefaultChatCommand implements ChatCommand
     {
         final MessageChannel channel = event.getChannel();
         if (!MessageUtil.checkPermission(event)) {
-            channel.sendMessage(ResponseMessage.USER_NOT_PERMISSION.getMessage()).queue();
+            channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.USER_NOT_PERMISSION.getMessage()).build()).queue();
             return;
         }
         //bot has permission to join voice channel
         if (!MessageUtil.hasPermissionToJoinVoiceChannel(event))
         {
-            channel.sendMessage(ResponseMessage.BOT_PERMISSION_JOIN_VOICE_CHANNEL.getMessage()).queue();
+            channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_PERMISSION_JOIN_VOICE_CHANNEL.getMessage()).build()).queue();
             return;
         }
         //message from voice channel
         if (!MessageUtil.checkMemberVoiceChatConnection(event))
         {
-            channel.sendMessage(ResponseMessage.USER_NOT_IN_VOICE_CHANNEL.getMessage()).queue();
+            channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.USER_NOT_IN_VOICE_CHANNEL.getMessage()).build()).queue();
             return;
         }
         //audio enable
         if (!bot.getBotConfig().getAudioEnable())
         {
-            channel.sendMessage(ResponseMessage.BOT_CANT_USE_AUDIO.getMessage()).queue();
+            channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_CANT_USE_AUDIO.getMessage()).build()).queue();
             return;
         }
         final AudioManager audioManager = event.getGuild().getAudioManager();
         //try connect
         if (audioManager.isAttemptingToConnect())
         {
-            channel.sendMessage(ResponseMessage.BOT_ALREADY_TRY_JOIN_CHANNEL.getMessage()).queue();
+            channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_ALREADY_TRY_JOIN_CHANNEL.getMessage()).build()).queue();
             return;
         }
         //open audio connection
         audioManager.openAudioConnection(MessageUtil.getVoiceChannel(event));
-        channel.sendMessage(ResponseMessage.BOT_CONNECT_TO_VOICE_CHANNEL.getMessage()).queue();
+        channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_CONNECT_TO_VOICE_CHANNEL.getMessage()).build()).queue();
     }
 
     @Override
