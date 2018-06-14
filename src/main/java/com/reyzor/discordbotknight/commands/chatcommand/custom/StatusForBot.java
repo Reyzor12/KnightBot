@@ -54,7 +54,7 @@ public class StatusForBot extends DefaultChatCommand implements ChatCommandIF
                 if (args.size() < 2)
                 {
                     String status = args.get(0);
-                    bot.getBotConfig().setStatus(status);
+                    bot.getBotConfig().setProperty("status", status);
                     event.getJDA().getPresence().setStatus(bot.getBotConfig().getStatus(status));
                     channel.sendMessage(MessageUtil.getInfoMessage("Статус бота изменен").build()).queue();
                 } else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.UNCORRECT_COMMAND_ARGS.getMessage()).build()).queue();

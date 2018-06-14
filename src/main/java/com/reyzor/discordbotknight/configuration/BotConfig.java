@@ -67,7 +67,7 @@ public class BotConfig
         return prefix;
     }
 
-    public void setStatus(String status)
+    public void setProperty(String property, String value)
     {
         Properties properties = new Properties();
         properties.setProperty("prefix", prefix);
@@ -75,6 +75,7 @@ public class BotConfig
         properties.setProperty("audio_enable", audioEnable);
         properties.setProperty("game", game);
         properties.setProperty("status",status);
+        properties.setProperty(property, value);
         try {
             final DefaultPropertiesPersister persister = new DefaultPropertiesPersister();
             File file = new File(getClass().getClassLoader().getResource(BOT_CONFIG).getPath());
