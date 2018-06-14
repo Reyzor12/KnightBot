@@ -18,7 +18,8 @@ public enum ResponseMessage
     BOT_CANT_USE_AUDIO("Бот не поддерживает аудио"),
     BOT_CANT_SET_AVATAR("Не удалось установить новую аватарку на бота"),
     BOT_SET_AVATAR("Новая аватарка успешно поставлена на бота"),
-    NOT_CORRECT_LINK("Не корректно указана ссылка");
+    NOT_CORRECT_LINK("Не корректно указана ссылка"),
+    UNCORRECT_COMMAND_ARGS("Не корректные аргументы у данной команды");
 
     private String message;
 

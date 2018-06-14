@@ -42,7 +42,7 @@ public class KnightDiscordBot
                     .setToken(bot.getBotConfig().getToken())
                     .setAudioEnabled(true)
                     .setGame(Game.playing(bot.getBotConfig().getGame()))
-                    .setStatus(OnlineStatus.DO_NOT_DISTURB)
+                    .setStatus(bot.getBotConfig().getStatus())
                     .addEventListener(bot)
                     .addEventListener(context.getApplicationContext().getBean(COMMAND_BEAN))
                     .buildAsync();
