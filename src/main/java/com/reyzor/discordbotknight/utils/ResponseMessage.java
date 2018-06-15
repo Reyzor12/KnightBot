@@ -14,7 +14,7 @@ public enum ResponseMessage
     BOT_NOT_IN_VOICE_CHANNEL("Бот не в голосовом чате"),
     BOT_LEAVE_VOICE_CHANNEL("Бот покинул голосовой чат"),
     BOT_ON_PAUSE("Бот поставлен на паузу"),
-    BOT_NOT_PLAY_TRACK("Бот не проигрывает ни какоц трек сейчас"),
+    BOT_NOT_PLAY_TRACK("Бот не проигрывает ни какой трек сейчас"),
     BOT_CANT_USE_AUDIO("Бот не поддерживает аудио"),
     BOT_CANT_SET_AVATAR("Не удалось установить новую аватарку на бота"),
     BOT_SET_AVATAR("Новая аватарка успешно поставлена на бота"),

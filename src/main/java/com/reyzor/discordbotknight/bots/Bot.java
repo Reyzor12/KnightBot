@@ -1,5 +1,6 @@
 package com.reyzor.discordbotknight.bots;
 
+import com.reyzor.discordbotknight.audio.AudioHandler;
 import com.reyzor.discordbotknight.commands.chatcommand.ChatCommandIF;
 import com.reyzor.discordbotknight.configuration.BotConfig;
 import com.reyzor.discordbotknight.configuration.BotSettings;
@@ -64,5 +65,24 @@ public interface Bot {
 
     BotSettings getBotSettings(Guild guild);
 
+    /** Command for define position track {@link AudioTrack} at track list
+     * @return track position at track list
+     * */
+
     int queueTrack(ChatCommandIF command, AudioTrack track);
+
+    /**
+     * Setup for guild {@link Guild} audio {@link AudioHandler}
+     * return audio handler for guild
+     * */
+
+    AudioHandler setUpHandler(ChatCommandIF command);
+    AudioHandler setUpHandler(Guild guild);
+
+    /**
+     * Set volume for {@link com.sedmelluq.discord.lavaplayer.player.AudioPlayer} at
+     * {@link AudioHandler} for bot {@link Bot} at guild {@link Guild}
+     * */
+
+    void setVolume(Guild guild, Integer volume);
 }

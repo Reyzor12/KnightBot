@@ -55,6 +55,7 @@ public abstract class DefaultChatCommand implements ChatCommandIF
         return splitCommand.subList(1, splitCommand.size());
     }
 
+    @Deprecated
     @Override
     public List<String> getArgs()
     {
@@ -62,12 +63,14 @@ public abstract class DefaultChatCommand implements ChatCommandIF
         return new ArrayList<>(message.subList(1, message.size()));
     }
 
+    @Deprecated
     @Override
     public User getAuthor()
     {
         return event.getAuthor();
     }
 
+    @Deprecated
     @Override
     public Guild getGuild()
     {

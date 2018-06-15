@@ -199,11 +199,12 @@ public class BaseBot extends ListenerAdapter implements Bot {
         audioManager.source(YoutubeAudioSourceManager.class).setPlaylistPageCount(10);
     }
 
+    @Override
     public AudioHandler setUpHandler(ChatCommandIF command)
     {
         return setUpHandler(command.getGuild());
     }
-
+    @Override
     public AudioHandler setUpHandler(Guild guild)
     {
         AudioHandler handler;
@@ -217,5 +218,21 @@ public class BaseBot extends ListenerAdapter implements Bot {
         }
         else handler = (AudioHandler) guild.getAudioManager().getSendingHandler();
         return handler;
+    }
+
+    @Override
+    public void setVolume(Guild guild, Integer volume)
+    {
+        BotSettings settings = botSettings.get(guild.getId());
+        if (settings == null)
+        {
+            botSettings.put(guild.getId(), new BotSettings(0l, 0l, 0l, volume, null, false));
+
+        }
+        else
+        {
+            settings.setVolume(volume);
+        }
+        writeSettings();
     }
 }
