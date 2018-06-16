@@ -18,4 +18,12 @@ public abstract class Checker
     }
 
     public abstract boolean check(MessageReceivedEvent event);
+
+    protected boolean checkNext(MessageReceivedEvent event)
+    {
+        if (nextChecker == null) {
+            return true;
+        }
+        return nextChecker.check(event);
+    }
 }

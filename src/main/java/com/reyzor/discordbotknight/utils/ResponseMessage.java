@@ -19,7 +19,8 @@ public enum ResponseMessage
     BOT_CANT_SET_AVATAR("Не удалось установить новую аватарку на бота"),
     BOT_SET_AVATAR("Новая аватарка успешно поставлена на бота"),
     NOT_CORRECT_LINK("Не корректно указана ссылка"),
-    UNCORRECT_COMMAND_ARGS("Не корректные аргументы у данной команды");
+    UNCORRECT_COMMAND_ARGS("Не корректные аргументы у данной команды"),
+    TRACK_LIST_IS_EMPTY("Трек лист пуст");
 
     private String message;
 
