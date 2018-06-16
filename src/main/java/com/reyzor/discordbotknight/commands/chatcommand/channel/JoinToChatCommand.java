@@ -5,6 +5,7 @@ import com.reyzor.discordbotknight.commands.chatcommand.ChatCommandIF;
 import com.reyzor.discordbotknight.commands.chatcommand.DefaultChatCommand;
 import com.reyzor.discordbotknight.utils.MessageUtil;
 import com.reyzor.discordbotknight.utils.ResponseMessage;
+import com.reyzor.discordbotknight.utils.check.*;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.managers.AudioManager;
@@ -33,39 +34,19 @@ public class JoinToChatCommand extends DefaultChatCommand implements ChatCommand
     @Override
     public void execute(MessageReceivedEvent event, String command)
     {
+        Checker connectAudioChecker     = new BotAlreadyTryConnectChecker();
+        Checker audioEnableAudioChecker = new BotAudioChecker(bot, connectAudioChecker);
+        Checker memberInVoiceChecker    = new CheckUserInVoiceChannelChecker(audioEnableAudioChecker);
+        Checker permissionToJoinChecker = new PermissionToJoinVoiceChannelChecker(memberInVoiceChecker);
+        Checker permissionChecker       = new PermissionChecker(permissionToJoinChecker);
+
         final MessageChannel channel = event.getChannel();
-        if (!MessageUtil.checkPermission(event)) {
-            channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.USER_NOT_PERMISSION.getMessage()).build()).queue();
-            return;
-        }
-        //bot has permission to join voice channel
-        if (!MessageUtil.hasPermissionToJoinVoiceChannel(event))
+
+        if (permissionChecker.check(event))
         {
-            channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_PERMISSION_JOIN_VOICE_CHANNEL.getMessage()).build()).queue();
-            return;
+            event.getGuild().getAudioManager().openAudioConnection(MessageUtil.getVoiceChannel(event));
+            channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_CONNECT_TO_VOICE_CHANNEL.getMessage()).build()).queue();
         }
-        //message from voice channel
-        if (!MessageUtil.checkMemberVoiceChatConnection(event))
-        {
-            channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.USER_NOT_IN_VOICE_CHANNEL.getMessage()).build()).queue();
-            return;
-        }
-        //audio enable
-        if (!bot.getBotConfig().getAudioEnable())
-        {
-            channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_CANT_USE_AUDIO.getMessage()).build()).queue();
-            return;
-        }
-        final AudioManager audioManager = event.getGuild().getAudioManager();
-        //try connect
-        if (audioManager.isAttemptingToConnect())
-        {
-            channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_ALREADY_TRY_JOIN_CHANNEL.getMessage()).build()).queue();
-            return;
-        }
-        //open audio connection
-        audioManager.openAudioConnection(MessageUtil.getVoiceChannel(event));
-        channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_CONNECT_TO_VOICE_CHANNEL.getMessage()).build()).queue();
     }
 
     @Override

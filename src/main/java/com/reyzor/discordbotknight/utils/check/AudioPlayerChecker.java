@@ -12,6 +12,9 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 public class AudioPlayerChecker extends Checker
 {
+    public AudioPlayerChecker() { super(); }
+    public AudioPlayerChecker(Checker checker) { super(checker); }
+
     @Override
     public boolean check(MessageReceivedEvent event)
     {

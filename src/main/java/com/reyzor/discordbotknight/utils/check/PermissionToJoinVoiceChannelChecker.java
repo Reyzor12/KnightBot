@@ -13,6 +13,9 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 public class PermissionToJoinVoiceChannelChecker extends Checker
 {
+    public PermissionToJoinVoiceChannelChecker() { super(); }
+    public PermissionToJoinVoiceChannelChecker(Checker checker) { super(checker); }
+
     @Override
     public boolean check(MessageReceivedEvent event)
     {

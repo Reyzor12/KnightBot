@@ -13,6 +13,9 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 public class BotAlreadyTryConnectChecker extends Checker
 {
+    public BotAlreadyTryConnectChecker() { super(); }
+    public BotAlreadyTryConnectChecker(Checker checker) { super(checker); }
+
     @Override
     public boolean check(MessageReceivedEvent event)
     {

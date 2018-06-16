@@ -5,20 +5,20 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 /**
  * Check if {@link com.sedmelluq.discord.lavaplayer.player.AudioPlayer}
- * on pause
+ * not on pause
  * @author Reyzor
  * @version 1.0
  * @since 16.06.2018
  */
 
-public class AudioOnPauseChecker extends Checker
+public class AudioNotOnPauseChecker extends Checker
 {
-    public AudioOnPauseChecker() { super(); }
-    public AudioOnPauseChecker(Checker checker) { super(checker); }
+    public AudioNotOnPauseChecker(){ super(); }
+    public AudioNotOnPauseChecker(Checker checker) { super(checker); }
 
     @Override
     public boolean check(MessageReceivedEvent event) {
-        if (!((AudioHandler)event.getGuild().getAudioManager()).getAudioPlayer().isPaused()) return false;
+        if (((AudioHandler)event.getGuild().getAudioManager()).getAudioPlayer().isPaused()) return false;
         return checkNext(event);
     }
 }

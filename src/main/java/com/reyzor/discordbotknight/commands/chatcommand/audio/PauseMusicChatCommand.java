@@ -6,6 +6,7 @@ import com.reyzor.discordbotknight.commands.chatcommand.ChatCommandIF;
 import com.reyzor.discordbotknight.commands.chatcommand.DefaultChatCommand;
 import com.reyzor.discordbotknight.utils.MessageUtil;
 import com.reyzor.discordbotknight.utils.ResponseMessage;
+import com.reyzor.discordbotknight.utils.check.*;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,23 +34,21 @@ public class PauseMusicChatCommand extends DefaultChatCommand implements ChatCom
     @Override
     public void execute(MessageReceivedEvent event, String command)
     {
+        Checker audioNotOnPauseChecker      = new AudioNotOnPauseChecker();
+        Checker audioPlayerChecker          = new AudioPlayerChecker(audioNotOnPauseChecker);
+        Checker audioHandlerChecker         = new AudioHandlerChecker(audioPlayerChecker);
+        Checker botInVoiceChannelChecker    = new BotInVoiceChatChecker(audioHandlerChecker);
+        Checker memberInVoiceChannelChecker = new CheckUserInVoiceChannelChecker(botInVoiceChannelChecker);
+        Checker permissionChecker           = new PermissionChecker(memberInVoiceChannelChecker);
+
         final MessageChannel channel = event.getChannel();
-        if (MessageUtil.checkPermission(event)) {
-            if (MessageUtil.checkMemberVoiceChatConnection(event))
-            {
-                if (MessageUtil.checkBotVoiceChatConnection(event))
-                {
-                    AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
-                    if (handler != null && handler.getAudioPlayer().getPlayingTrack() != null && !handler.getAudioPlayer().isPaused())
-                    {
-                        handler.getAudioPlayer().setPaused(true);
-                        channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_ON_PAUSE.getMessage()).build()).queue();
-                    }
-                } else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_NOT_IN_VOICE_CHANNEL.getMessage()).build()).queue();
-            }
-            else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.USER_NOT_IN_VOICE_CHANNEL.getMessage()).build()).queue();
+        final AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+
+        if (permissionChecker.check(event))
+        {
+            handler.getAudioPlayer().setPaused(true);
+            channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_ON_PAUSE.getMessage()).build()).queue();
         }
-        else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.USER_NOT_PERMISSION.getMessage()).build()).queue();
     }
 
     @Override

@@ -13,8 +13,11 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
  * @since 16.06.2018
  */
 
-public class TracklistEmptyChecker extends Checker
+public class TracklistNotEmptyChecker extends Checker
 {
+    public TracklistNotEmptyChecker() { super(); }
+    public TracklistNotEmptyChecker(Checker checker) { super(checker); }
+
     @Override
     public boolean check(MessageReceivedEvent event) {
         if (((AudioHandler)event.getGuild().getAudioManager()).getQueue().isEmpty()) {

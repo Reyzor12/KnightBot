@@ -6,6 +6,7 @@ import com.reyzor.discordbotknight.commands.chatcommand.ChatCommandIF;
 import com.reyzor.discordbotknight.commands.chatcommand.DefaultChatCommand;
 import com.reyzor.discordbotknight.utils.MessageUtil;
 import com.reyzor.discordbotknight.utils.ResponseMessage;
+import com.reyzor.discordbotknight.utils.check.Checker;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -40,6 +41,8 @@ public class StopAllMusicChatCommand extends DefaultChatCommand implements ChatC
     @Override
     public void execute(MessageReceivedEvent event, String command)
     {
+        Checker permissionChecker = new Permission
+
         final MessageChannel channel = event.getChannel();
         if (MessageUtil.checkPermission(event))
         {

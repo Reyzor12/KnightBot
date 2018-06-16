@@ -19,6 +19,12 @@ public class BotAudioChecker extends Checker
 
     public BotAudioChecker(Bot bot)
     {
+        super();
+        this.bot = bot;
+    }
+    public BotAudioChecker(Bot bot, Checker checker)
+    {
+        super(checker);
         this.bot = bot;
     }
 

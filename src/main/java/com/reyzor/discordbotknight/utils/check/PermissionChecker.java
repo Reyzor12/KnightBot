@@ -15,6 +15,9 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 public class PermissionChecker extends Checker
 {
+    public PermissionChecker() { super(); }
+    public PermissionChecker(Checker checker) { super(checker); }
+
     @Override
     public boolean check(MessageReceivedEvent event)
     {

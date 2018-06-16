@@ -14,6 +14,9 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 public class CheckUserInVoiceChannelChecker extends Checker
 {
+    public CheckUserInVoiceChannelChecker() { super(); }
+    public CheckUserInVoiceChannelChecker(Checker checker) { super(checker); }
+
     @Override
     public boolean check(MessageReceivedEvent event)
     {

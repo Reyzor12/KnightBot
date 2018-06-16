@@ -5,7 +5,7 @@ import com.reyzor.discordbotknight.bots.Bot;
 import com.reyzor.discordbotknight.commands.chatcommand.ChatCommandIF;
 import com.reyzor.discordbotknight.commands.chatcommand.DefaultChatCommand;
 import com.reyzor.discordbotknight.utils.MessageUtil;
-import com.reyzor.discordbotknight.utils.ResponseMessage;
+import com.reyzor.discordbotknight.utils.check.*;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -35,29 +35,26 @@ public class CurrentTrackChatCommand extends DefaultChatCommand implements ChatC
     @Override
     public void execute(MessageReceivedEvent event, String command)
     {
-        final MessageChannel channel = event.getChannel();
-        if (MessageUtil.checkMemberVoiceChatConnection(event))
+        Checker botPlayTrackChecker      = new BotPlayTrackChecker();
+        Checker audioPlayerChecker       = new AudioPlayerChecker(botPlayTrackChecker);
+        Checker handlerChecker           = new AudioHandlerChecker(audioPlayerChecker);
+        Checker botInVoiceChatChecker    = new BotInVoiceChatChecker(handlerChecker);
+        Checker memberInVoiceChatChecker = new CheckUserInVoiceChannelChecker(botInVoiceChatChecker);
+
+        if (memberInVoiceChatChecker.check(event))
         {
-            if (MessageUtil.checkBotVoiceChatConnection(event))
-            {
-                final AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
-                if (handler != null && handler.getAudioPlayer() != null)
-                {
-                    final AudioTrack track = handler.getAudioPlayer().getPlayingTrack();
-                    if (track != null)
-                    {
-                        StringBuilder sb = new StringBuilder("Продолжительность :\n");
-                        sb.append(MessageUtil.formatTimeTrack(track.getDuration()));
-                        sb.append("\n Автор ");
-                        sb.append(track.getInfo().author);
-                        EmbedBuilder builder = MessageUtil.getTemplateBuilder();
-                        builder.setTitle("Текущий трек: ");
-                        builder.addField("**" + track.getInfo().title + "** ", sb.toString(), false);
-                        channel.sendMessage(builder.build()).queue();
-                    } else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_NOT_PLAY_TRACK.getMessage()).build()).queue();
-                }
-            } else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_NOT_IN_VOICE_CHANNEL.getMessage()).build()).queue();
-        } else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_NOT_IN_VOICE_CHANNEL.getMessage()).build()).queue();
+            final MessageChannel channel = event.getChannel();
+            final AudioTrack track = ((AudioHandler)event.getGuild().getAudioManager().getSendingHandler()).getAudioPlayer().getPlayingTrack();
+
+            StringBuilder sb = new StringBuilder("Продолжительность :\n");
+            sb.append(MessageUtil.formatTimeTrack(track.getDuration()));
+            sb.append("\n Автор ");
+            sb.append(track.getInfo().author);
+            EmbedBuilder builder = MessageUtil.getTemplateBuilder();
+            builder.setTitle("Текущий трек: ");
+            builder.addField("**" + track.getInfo().title + "** ", sb.toString(), false);
+            channel.sendMessage(builder.build()).queue();
+        }
     }
 
     @Override

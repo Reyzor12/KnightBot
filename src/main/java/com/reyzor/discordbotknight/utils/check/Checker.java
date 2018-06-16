@@ -9,6 +9,11 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 public abstract class Checker
 {
+    public Checker(){}
+    public Checker(Checker checker) {
+        this.nextChecker = checker;
+    }
+
     private Checker nextChecker;
 
     public Checker setNextChecker(Checker checker)

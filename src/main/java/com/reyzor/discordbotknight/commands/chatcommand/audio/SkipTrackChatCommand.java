@@ -6,6 +6,7 @@ import com.reyzor.discordbotknight.commands.chatcommand.ChatCommandIF;
 import com.reyzor.discordbotknight.commands.chatcommand.DefaultChatCommand;
 import com.reyzor.discordbotknight.utils.MessageUtil;
 import com.reyzor.discordbotknight.utils.ResponseMessage;
+import com.reyzor.discordbotknight.utils.check.*;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -34,26 +35,25 @@ public class SkipTrackChatCommand extends DefaultChatCommand implements ChatComm
     @Override
     public void execute(MessageReceivedEvent event, String command)
     {
+        Checker botPlayTrackChecker = new BotPlayTrackChecker();
+        Checker audioPlayerChecker = new AudioPlayerChecker(botPlayTrackChecker);
+        Checker audioHandlerChecker = new AudioHandlerChecker(audioPlayerChecker);
+        Checker botInVoiceChannelChecker = new BotInVoiceChatChecker(audioHandlerChecker);
+        Checker memberInVoiceChannelChecker = new CheckUserInVoiceChannelChecker(botInVoiceChannelChecker);
+        Checker permissionChecker = new PermissionChecker(memberInVoiceChannelChecker);
+
         final MessageChannel channel = event.getChannel();
-        if (MessageUtil.checkPermission(event))
+
+        if (permissionChecker.check(event))
         {
-            if (MessageUtil.checkBotVoiceChatConnection(event))
-            {
-                final AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
-                if (handler != null && handler.getAudioPlayer() != null) {
-                    final AudioPlayer player = handler.getAudioPlayer();
-                    final AudioTrack track = player.getPlayingTrack();
-                    if (track != null)
-                    {
-                        player.stopTrack();
-                        StringBuilder sb = new StringBuilder("Трек **");
-                        sb.append(track.getInfo().title);
-                        sb.append("** пропущен!");
-                        channel.sendMessage(MessageUtil.getInfoMessage(sb.toString()).build()).queue();
-                    } else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_NOT_PLAY_TRACK.getMessage()).build()).queue();
-                }
-            } else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_NOT_IN_VOICE_CHANNEL.getMessage()).build()).queue();
-        } else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.USER_NOT_PERMISSION.getMessage()).build()).queue();
+            final AudioPlayer player = ((AudioHandler)event.getGuild().getAudioManager().getSendingHandler()).getAudioPlayer();
+            final AudioTrack track = player.getPlayingTrack();
+            player.stopTrack();
+            StringBuilder sb = new StringBuilder("Трек **");
+            sb.append(track.getInfo().title);
+            sb.append("** пропущен!");
+            channel.sendMessage(MessageUtil.getInfoMessage(sb.toString()).build()).queue();
+        }
     }
 
     @Override

@@ -12,6 +12,9 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 public class AudioHandlerChecker extends Checker
 {
+    public AudioHandlerChecker(){ super(); }
+    public AudioHandlerChecker(Checker checker){ super(checker); }
+
     @Override
     public boolean check(MessageReceivedEvent event) {
         if (event.getGuild().getAudioManager() == null) return false;

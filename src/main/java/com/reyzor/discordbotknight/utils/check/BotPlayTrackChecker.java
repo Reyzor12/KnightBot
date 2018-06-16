@@ -16,6 +16,9 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 public class BotPlayTrackChecker extends Checker
 {
+    public BotPlayTrackChecker() { super(); }
+    public BotPlayTrackChecker(Checker checker) { super(checker); }
+
     @Override
     public boolean check(MessageReceivedEvent event)
     {
