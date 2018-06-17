@@ -18,7 +18,7 @@ public class AudioPlayerChecker extends Checker
     @Override
     public boolean check(MessageReceivedEvent event)
     {
-        if (((AudioHandler)event.getGuild().getAudioManager()).getAudioPlayer() == null) return false;
+        if (((AudioHandler)event.getGuild().getAudioManager().getSendingHandler()).getAudioPlayer() == null) return false;
         return checkNext(event);
     }
 }

@@ -13,9 +13,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Playlist for {@link com.reyzor.discordbotknight.bots.Bot}
@@ -175,14 +177,13 @@ public class Playlist
                 return null;
             }
         } catch (IOException e) {
-            e.printStackTrace();
             return null;
         }
     }
 
     public static boolean folderExists()
     {
-        return Files.exists(Paths.get("Playlists"));
+        return Files.exists(Paths.get("Playlist"));
     }
 
     public static void createFolder()
@@ -198,6 +199,23 @@ public class Playlist
     public List<String> getItems() { return items; }
 
     public List<AudioTrack> getTracks() { return tracks; }
+
+    public static List<String> getPlaylists()
+    {
+        if (folderExists())
+        {
+            File folder = new File("Playlist");
+            return Arrays.asList(folder.listFiles(pathname -> pathname.getName().endsWith(".txt")))
+                    .stream()
+                    .map(file -> file.getName().substring(0, file.getName().length() - 4))
+                    .collect(Collectors.toList());
+        }
+        else
+        {
+            createFolder();
+            return null;
+        }
+    }
 
     public class PlaylistLoadError
     {

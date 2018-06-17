@@ -6,5 +6,5 @@ package com.reyzor.discordbotknight.commands.chatcommand.channel;
  * @since 15.06.2018
  */
 public class VoteForChatCommand {
-    fasfsdsd
+    //fasfsdsd
 }

@@ -6,7 +6,7 @@ import com.reyzor.discordbotknight.commands.chatcommand.ChatCommandIF;
 import com.reyzor.discordbotknight.commands.chatcommand.DefaultChatCommand;
 import com.reyzor.discordbotknight.utils.MessageUtil;
 import com.reyzor.discordbotknight.utils.ResponseMessage;
-import com.reyzor.discordbotknight.utils.check.Checker;
+import com.reyzor.discordbotknight.utils.check.*;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -41,29 +41,27 @@ public class StopAllMusicChatCommand extends DefaultChatCommand implements ChatC
     @Override
     public void execute(MessageReceivedEvent event, String command)
     {
-        Checker permissionChecker = new Permission
+        Checker audioHandlerChecker = new AudioHandlerChecker();
+        Checker botInVoiceChannelChecker = new BotInVoiceChatChecker(audioHandlerChecker);
+        Checker memberInVoiceChannelChecker = new CheckUserInVoiceChannelChecker(botInVoiceChannelChecker);
+        Checker permissionChecker = new PermissionChecker(memberInVoiceChannelChecker);
 
         final MessageChannel channel = event.getChannel();
-        if (MessageUtil.checkPermission(event))
+
+        if (permissionChecker.check(event))
         {
-            if (MessageUtil.checkMemberVoiceChatConnection(event))
+            Checker botNotOnPauseChecker = new AudioNotOnPauseChecker();
+            Checker botPlayTrackChecker = new BotPlayTrackChecker(botNotOnPauseChecker);
+
+            final AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+
+            if (botPlayTrackChecker.check(event))
             {
-                if (MessageUtil.checkBotVoiceChatConnection(event))
-                {
-                    final AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
-                    if (handler != null)
-                    {
-                        final AudioPlayer player = handler.getAudioPlayer();
-                        if (player.getPlayingTrack() != null && !player.isPaused())
-                        {
-                            player.isPaused();
-                        }
-                        handler.stopAndClear();
-                        channel.sendMessage(MessageUtil.getInfoMessage("Воспроизведение остановлено, список треков очищен!").build()).queue();
-                    }
-                } else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_NOT_IN_VOICE_CHANNEL.getMessage()).build()).queue();
-            } else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.USER_NOT_IN_VOICE_CHANNEL.getMessage()).build()).queue();
-        } else channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.USER_NOT_PERMISSION.getMessage()).build()).queue();
+                handler.getAudioPlayer().setPaused(true);
+            }
+            handler.stopAndClear();
+            channel.sendMessage(MessageUtil.getInfoMessage("Воспроизведение остановлено, список треков очищен!").build()).queue();
+        }
     }
 
     @Override

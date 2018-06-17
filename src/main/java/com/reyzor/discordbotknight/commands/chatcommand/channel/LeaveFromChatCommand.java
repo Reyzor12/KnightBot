@@ -6,10 +6,7 @@ import com.reyzor.discordbotknight.commands.chatcommand.ChatCommandIF;
 import com.reyzor.discordbotknight.commands.chatcommand.DefaultChatCommand;
 import com.reyzor.discordbotknight.utils.MessageUtil;
 import com.reyzor.discordbotknight.utils.ResponseMessage;
-import com.reyzor.discordbotknight.utils.check.BotInVoiceChatChecker;
-import com.reyzor.discordbotknight.utils.check.CheckUserInVoiceChannelChecker;
-import com.reyzor.discordbotknight.utils.check.Checker;
-import com.reyzor.discordbotknight.utils.check.PermissionChecker;
+import com.reyzor.discordbotknight.utils.check.*;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -50,7 +47,10 @@ public class LeaveFromChatCommand extends DefaultChatCommand implements ChatComm
 
         if (permissionChecker.check(event))
         {
-            ((AudioHandler)event.getGuild().getAudioManager().getSendingHandler()).stopAndClear();
+            if (new AudioHandlerChecker().check(event))
+            {
+                ((AudioHandler)event.getGuild().getAudioManager().getSendingHandler()).stopAndClear();
+            }
             event.getGuild().getAudioManager().closeAudioConnection();
             channel.sendMessage(MessageUtil.getInfoMessage(ResponseMessage.BOT_LEAVE_VOICE_CHANNEL.getMessage()).build()).queue();
         }

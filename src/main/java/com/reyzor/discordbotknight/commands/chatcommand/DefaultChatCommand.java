@@ -52,7 +52,7 @@ public abstract class DefaultChatCommand implements ChatCommandIF
         final String nCommand = command == null ? null : command.trim();
         final List<String> splitCommand = nCommand == null ? new ArrayList<>() : Arrays.asList(nCommand.split(" "));
         if (nCommand == null || nCommand.isEmpty() || splitCommand.size() < 2) return new ArrayList<>();
-        return splitCommand.subList(1, splitCommand.size());
+        return new ArrayList(splitCommand.subList(1, splitCommand.size()));
     }
 
     @Deprecated

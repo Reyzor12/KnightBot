@@ -20,7 +20,19 @@ public enum ResponseMessage
     BOT_SET_AVATAR("Новая аватарка успешно поставлена на бота"),
     NOT_CORRECT_LINK("Не корректно указана ссылка"),
     UNCORRECT_COMMAND_ARGS("Не корректные аргументы у данной команды"),
-    TRACK_LIST_IS_EMPTY("Трек лист пуст");
+    TRACK_LIST_IS_EMPTY("Трек лист пуст"),
+    UNABLE_CREATE_PLAYLIST_FILE("Не получилось создать файл для плейлиста!"),
+    PLAYLIST_CREATE_WELL("Плейлист создан!"),
+    PLAYLIST_ALREADY_EXIST("Такой плейлист уже существует!"),
+    PLAYLIST_DOESNT_EXIST("Такого плейлиста не существует!"),
+    UNABLE_DELETE_PLAYLIST_FILE("Не получается удалить файл плейлиста"),
+    PLAYLIST_DELETE("Плейлист успешно удален"),
+    PLAYLISTS_ARE_ABSENT("Нет плейлистов!"),
+    UNABLE_CREATE_FOLDER_FOR_PLAYLIST("Не получается создать папку для плейлистов"),
+    PLAYLISTS_NOT_AVAILABLE("Не удается загрузить плейлисты"),
+    UNABLE_WRITE_TRACK_IN_PLAYLIST("Не удалось записать трек в плейлист"),
+    FILE_WRITE_IN_PLAYLIST("Трек успешно записан в плейлист"),
+    UNABLE_READ_FILE("Невозможно прочитать файл!");
 
     private String message;
 
