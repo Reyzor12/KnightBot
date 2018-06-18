@@ -6,7 +6,6 @@ import com.reyzor.discordbotknight.bots.Bot;
 import com.reyzor.discordbotknight.commands.chatcommand.ChatCommandIF;
 import com.reyzor.discordbotknight.commands.chatcommand.DefaultChatCommand;
 import com.reyzor.discordbotknight.utils.MessageUtil;
-import com.reyzor.discordbotknight.utils.ResponseMessage;
 import com.reyzor.discordbotknight.utils.SpecificQueue;
 import com.reyzor.discordbotknight.utils.check.*;
 import net.dv8tion.jda.core.EmbedBuilder;

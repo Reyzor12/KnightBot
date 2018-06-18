@@ -8,7 +8,6 @@ import com.reyzor.discordbotknight.utils.ResponseMessage;
 import com.reyzor.discordbotknight.utils.check.*;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.managers.AudioManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

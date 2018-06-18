@@ -4,7 +4,6 @@ import com.reyzor.discordbotknight.commands.chatcommand.audio.PlaylistManagerCha
 import com.reyzor.discordbotknight.playlist.Playlist;
 import com.reyzor.discordbotknight.utils.MessageUtil;
 import com.reyzor.discordbotknight.utils.ResponseMessage;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;

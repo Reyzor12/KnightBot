@@ -4,17 +4,11 @@ import com.reyzor.discordbotknight.bots.BaseBot;
 import com.reyzor.discordbotknight.bots.Bot;
 import com.reyzor.discordbotknight.configuration.Context;
 import com.reyzor.discordbotknight.configuration.ContextConfiguration;
-import com.reyzor.discordbotknight.utils.MessageUtil;
 import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
-import net.dv8tion.jda.core.entities.Icon;
 
 import javax.security.auth.login.LoginException;
-import java.io.File;
-import java.nio.file.Files;
 
 /**
  * Main class - start app

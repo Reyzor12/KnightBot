@@ -1,6 +1,5 @@
 package com.reyzor.discordbotknight.bots;
 
-import com.reyzor.discordbotknight.KnightDiscordBot;
 import com.reyzor.discordbotknight.audio.AudioHandler;
 import com.reyzor.discordbotknight.commands.chatcommand.ChatCommandIF;
 import com.reyzor.discordbotknight.configuration.BotConfig;

@@ -13,8 +13,6 @@ import com.reyzor.discordbotknight.utils.check.BotInVoiceChatChecker;
 import com.reyzor.discordbotknight.utils.check.CheckUserInVoiceChannelChecker;
 import com.reyzor.discordbotknight.utils.check.Checker;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.springframework.beans.factory.annotation.Autowired;

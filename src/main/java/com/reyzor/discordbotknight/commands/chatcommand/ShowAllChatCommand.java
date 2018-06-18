@@ -1,14 +1,12 @@
 package com.reyzor.discordbotknight.commands.chatcommand;
 
 import com.reyzor.discordbotknight.bots.Bot;
-import com.reyzor.discordbotknight.utils.LinkStorage;
 import com.reyzor.discordbotknight.utils.MessageUtil;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.util.Map;
 
 /**
