@@ -74,7 +74,7 @@ public class PlayMusicChatCommand extends DefaultChatCommand implements ChatComm
             final String url = args.get(0);
             channel
                     .sendMessage(MessageUtil.getInfoMessage("Загрузка трека ** " + url + " **").build())
-                    .queue(message -> bot.getAudioManager().loadItemOrdered(event.getGuild(), url, new ResultHandler(message, this, bot, false)));
+                    .queue(message -> bot.getAudioManager().loadItemOrdered(event.getGuild(), url, new ResultHandler(message, this, bot, false, null)));
         }
     }
 

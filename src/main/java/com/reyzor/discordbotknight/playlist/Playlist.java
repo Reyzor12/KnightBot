@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * @version 1.0
  * @since 06.06.2018
  */
-public class Playlist
+public class Playlist implements AudioPlaylist
 {
 
     private final String name;
@@ -198,7 +198,22 @@ public class Playlist
 
     public List<String> getItems() { return items; }
 
+    @Override
+    public String getName() {
+        return null;
+    }
+
     public List<AudioTrack> getTracks() { return tracks; }
+
+    @Override
+    public AudioTrack getSelectedTrack() {
+        return null;
+    }
+
+    @Override
+    public boolean isSearchResult() {
+        return false;
+    }
 
     public static List<String> getPlaylists()
     {

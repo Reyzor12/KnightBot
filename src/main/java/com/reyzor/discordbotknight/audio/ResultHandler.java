@@ -22,19 +22,21 @@ public class ResultHandler implements AudioLoadResultHandler
     final private ChatCommandIF command;
     final private boolean youtubeSearch;
     final private Bot bot;
+    final private AudioPlaylist playlist;
 
-    public ResultHandler(Message message, ChatCommandIF command,Bot bot, Boolean youtubeSearch)
+    public ResultHandler(Message message, ChatCommandIF command,Bot bot, Boolean youtubeSearch, AudioPlaylist playlist)
     {
         this.message = message;
         this.command = command;
         this.youtubeSearch = youtubeSearch;
         this.bot = bot;
+        this.playlist = playlist;
     }
 
     @Override
     public void trackLoaded(AudioTrack track)
     {
-        loadSingleTrack(track, null);
+        loadSingleTrack(track, playlist);
     }
 
     @Override
@@ -78,7 +80,7 @@ public class ResultHandler implements AudioLoadResultHandler
         }
         else
         {
-            bot.getAudioManager().loadItemOrdered(command.getGuild(), "youtube поиск " + command.getArgs(), new ResultHandler(message, command, bot, true));
+            bot.getAudioManager().loadItemOrdered(command.getGuild(), "youtube поиск " + command.getArgs(), new ResultHandler(message, command, bot, true, playlist));
         }
     }
 
